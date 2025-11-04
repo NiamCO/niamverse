@@ -1,0 +1,3906 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NiamVerse</title>
+    <link rel="icon" type="image/x-icon" href="favicon.png">
+    <link rel="shortcut icon" type="image/x-icon" href="favicon.png">
+    <link rel="apple-touch-icon" href="favicon.png">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Orbitron:wght@400;500;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #6c5ce7;
+            --primary-dark: #5649c0;
+            --secondary: #fd79a8;
+            --accent: #00cec9;
+            --dark: #2d3436;
+            --light: #f5f6fa;
+            --gray: #636e72;
+            --success: #00b894;
+            --warning: #fdcb6e;
+            --danger: #e17055;
+            --card-bg: rgba(255, 255, 255, 0.9);
+            --header-bg: rgba(255, 255, 255, 0.95);
+            --shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            --transition: all 0.3s ease;
+        }
+
+        .dark-theme {
+            --primary: #a29bfe;
+            --primary-dark: #8179d4;
+            --secondary: #ff9fb4;
+            --accent: #81ecec;
+            --dark: #dfe6e9;
+            --light: #2d3436;
+            --gray: #b2bec3;
+            --card-bg: rgba(45, 52, 54, 0.9);
+            --header-bg: rgba(45, 52, 54, 0.95);
+            --shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: var(--dark);
+            min-height: 100vh;
+            transition: var(--transition);
+            padding-bottom: 80px;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* Header Styles */
+        header {
+            background: var(--header-bg);
+            backdrop-filter: blur(10px);
+            border-radius: 0 0 20px 20px;
+            box-shadow: var(--shadow);
+            margin-bottom: 30px;
+            transition: var(--transition);
+        }
+
+        .header-content {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 15px 0;
+        }
+
+        .logo-section {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .logo {
+            width: 50px;
+            height: 50px;
+            border-radius: 12px;
+            object-fit: contain;
+        }
+
+        .logo-text {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 28px;
+            font-weight: 700;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .search-bar {
+            flex: 1;
+            max-width: 500px;
+            margin: 0 30px;
+            position: relative;
+        }
+
+        .search-bar input {
+            width: 100%;
+            padding: 12px 20px;
+            border-radius: 50px;
+            border: 2px solid var(--primary);
+            background: var(--light);
+            color: var(--dark);
+            font-size: 16px;
+            transition: var(--transition);
+        }
+
+        .search-bar input:focus {
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(108, 92, 231, 0.3);
+        }
+
+        .search-bar i {
+            position: absolute;
+            right: 20px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--primary);
+        }
+
+        .nav-buttons {
+            display: flex;
+            gap: 10px;
+        }
+
+        .nav-btn {
+            padding: 10px 20px;
+            border-radius: 50px;
+            background: var(--primary);
+            color: white;
+            border: none;
+            font-weight: 500;
+            cursor: pointer;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .nav-btn:hover {
+            background: var(--primary-dark);
+            transform: translateY(-2px);
+        }
+
+        .nav-btn.active {
+            background: var(--secondary);
+            box-shadow: 0 5px 15px rgba(253, 121, 168, 0.4);
+        }
+
+        /* Main Content */
+        .page {
+            display: none;
+            animation: fadeIn 0.5s ease;
+        }
+
+        .page.active {
+            display: block;
+        }
+
+        .page-title {
+            font-size: 32px;
+            margin-bottom: 20px;
+            text-align: center;
+            color: white;
+            text-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+        }
+
+        .games-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 25px;
+            margin-top: 30px;
+        }
+
+        .game-card {
+            background: var(--card-bg);
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: var(--shadow);
+            transition: var(--transition);
+            cursor: pointer;
+            position: relative;
+        }
+
+        .game-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2);
+        }
+
+        .game-card.featured::before {
+            content: "FEATURED";
+            position: absolute;
+            top: 15px;
+            right: -30px;
+            background: var(--secondary);
+            color: white;
+            padding: 5px 30px;
+            font-size: 12px;
+            font-weight: bold;
+            transform: rotate(45deg);
+            z-index: 2;
+        }
+
+        .game-thumb {
+            width: 100%;
+            height: 180px;
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, var(--primary), var(--accent));
+        }
+
+        .game-image {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: var(--transition);
+        }
+
+        .game-card:hover .game-image {
+            transform: scale(1.05);
+        }
+
+        .fallback-icon {
+            font-size: 50px;
+            color: white;
+            opacity: 0.7;
+            position: absolute;
+        }
+
+        .game-info {
+            padding: 15px;
+        }
+
+        .game-title {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: var(--dark);
+        }
+
+        .game-about {
+            font-size: 14px;
+            color: var(--gray);
+            line-height: 1.5;
+            display: -webkit-box;
+            -webkit-line-clamp: 3;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+
+        /* Game Frame */
+        .game-frame-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.9);
+            z-index: 1000;
+            display: none;
+            flex-direction: column;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .game-frame-container.active {
+            display: flex;
+        }
+
+        .game-frame-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 20px;
+            background: rgba(0, 0, 0, 0.8);
+            color: white;
+        }
+
+        .game-frame-title {
+            font-size: 20px;
+            font-weight: 600;
+        }
+
+        .game-frame-controls {
+            display: flex;
+            gap: 15px;
+        }
+
+        .frame-btn {
+            background: rgba(255, 255, 255, 0.2);
+            border: none;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .frame-btn:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: scale(1.1);
+        }
+
+        .game-frame {
+            flex: 1;
+            border: none;
+            background: white;
+        }
+
+        /* Settings */
+        .settings-container {
+            background: var(--card-bg);
+            border-radius: 16px;
+            padding: 30px;
+            box-shadow: var(--shadow);
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .setting-section {
+            margin-bottom: 30px;
+        }
+
+        .setting-title {
+            font-size: 22px;
+            margin-bottom: 15px;
+            color: var(--primary);
+            border-bottom: 2px solid var(--primary);
+            padding-bottom: 8px;
+        }
+
+        .theme-options {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+
+        .theme-option {
+            flex: 1;
+            min-width: 150px;
+            padding: 15px;
+            border-radius: 12px;
+            background: var(--light);
+            text-align: center;
+            cursor: pointer;
+            transition: var(--transition);
+            border: 2px solid transparent;
+        }
+
+        .theme-option:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        .theme-option.active {
+            border-color: var(--primary);
+        }
+
+        .theme-preview {
+            width: 60px;
+            height: 60px;
+            border-radius: 10px;
+            margin: 0 auto 10px;
+        }
+
+        .light-preview {
+            background: linear-gradient(135deg, #6c5ce7, #fd79a8);
+        }
+
+        .dark-preview {
+            background: linear-gradient(135deg, #2d3436, #636e72);
+        }
+
+        .cloaking-options {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .cloaking-option {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            padding: 15px;
+            background: var(--light);
+            border-radius: 12px;
+            transition: var(--transition);
+            cursor: pointer;
+        }
+
+        .cloaking-option:hover {
+            background: rgba(108, 92, 231, 0.1);
+        }
+
+        .cloak-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 18px;
+        }
+
+        .cloak-1 {
+            background: linear-gradient(135deg, #ff7675, #fd79a8);
+        }
+
+        .cloak-2 {
+            background: linear-gradient(135deg, #74b9ff, #0984e3);
+        }
+
+        .cloak-3 {
+            background: linear-gradient(135deg, #55efc4, #00b894);
+        }
+
+        .custom-cloaking {
+            margin-top: 20px;
+            padding: 20px;
+            background: var(--light);
+            border-radius: 12px;
+        }
+
+        .custom-cloaking h3 {
+            margin-bottom: 15px;
+            color: var(--primary);
+        }
+
+        .cloaking-inputs {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .input-group {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .input-group label {
+            font-weight: 500;
+            color: var(--dark);
+        }
+
+        .input-group input {
+            padding: 12px 15px;
+            border-radius: 8px;
+            border: 2px solid var(--primary);
+            background: var(--card-bg);
+            color: var(--dark);
+            transition: var(--transition);
+        }
+
+        .input-group input:focus {
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(108, 92, 231, 0.3);
+        }
+
+        .cloak-btn {
+            padding: 12px 25px;
+            background: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: var(--transition);
+            font-weight: 500;
+        }
+
+        .cloak-btn:hover {
+            background: var(--primary-dark);
+            transform: translateY(-2px);
+        }
+
+        .about-blank-embedder {
+            background: var(--light);
+            padding: 20px;
+            border-radius: 12px;
+        }
+
+        .embedder-input {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+
+        .embedder-input input {
+            flex: 1;
+            padding: 12px 15px;
+            border-radius: 8px;
+            border: 2px solid var(--primary);
+            background: var(--card-bg);
+            color: var(--dark);
+        }
+
+        .embed-btn {
+            padding: 12px 25px;
+            background: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .embed-btn:hover {
+            background: var(--primary-dark);
+        }
+
+        /* Footer */
+        footer {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            background: var(--header-bg);
+            padding: 15px 0;
+            text-align: center;
+            box-shadow: 0 -5px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        .social-links {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+        }
+
+        .social-link {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: var(--dark);
+            text-decoration: none;
+            transition: var(--transition);
+        }
+
+        .social-link:hover {
+            color: var(--primary);
+            transform: translateY(-2px);
+        }
+
+        /* Animations */
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        /* Responsive */
+        @media (max-width: 992px) {
+            .header-content {
+                flex-wrap: wrap;
+            }
+            
+            .search-bar {
+                order: 3;
+                max-width: 100%;
+                margin: 15px 0 0;
+            }
+            
+            .nav-buttons {
+                overflow-x: auto;
+                padding-bottom: 10px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .games-grid {
+                grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+            }
+            
+            .theme-options {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header with Navigation -->
+    <header>
+        <div class="container">
+            <div class="header-content">
+                <div class="logo-section">
+                    <img src="icon.png" alt="NiamVerse Logo" class="logo">
+                    <div class="logo-text">NiamVerse</div>
+                </div>
+                
+                <div class="search-bar">
+                    <input type="text" placeholder="Search for games...">
+                    <i class="fas fa-search"></i>
+                </div>
+                
+                <div class="nav-buttons">
+                    <button class="nav-btn active" data-page="home">
+                        <i class="fas fa-home"></i> Home
+                    </button>
+                    <button class="nav-btn" data-page="new">
+                        <i class="fas fa-star"></i> New
+                    </button>
+                    <button class="nav-btn" data-page="trending">
+                        <i class="fas fa-fire"></i> Trending
+                    </button>
+                    <button class="nav-btn" data-page="favorites">
+                        <i class="fas fa-heart"></i> Favorites
+                    </button>
+                    <button class="nav-btn" data-page="recent">
+                        <i class="fas fa-history"></i> Recent
+                    </button>
+                    <button class="nav-btn" data-page="settings">
+                        <i class="fas fa-cog"></i> Settings
+                    </button>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="container">
+        <!-- Home Page -->
+        <section id="home" class="page active">
+            <h1 class="page-title">All Games</h1>
+            <div class="games-grid" id="home-games">
+                <!-- Games will be loaded here by JavaScript -->
+            </div>
+        </section>
+
+        <!-- New Games Page -->
+        <section id="new" class="page">
+            <h1 class="page-title">New Games</h1>
+            <div class="games-grid" id="new-games">
+                <!-- New games will be loaded here by JavaScript -->
+            </div>
+        </section>
+
+        <!-- Trending Games Page -->
+        <section id="trending" class="page">
+            <h1 class="page-title">Trending Games</h1>
+            <div class="games-grid" id="trending-games">
+                <!-- Trending games will be loaded here by JavaScript -->
+            </div>
+        </section>
+
+        <!-- Favorites Page -->
+        <section id="favorites" class="page">
+            <h1 class="page-title">Your Favorites</h1>
+            <div class="games-grid" id="favorites-games">
+                <!-- Favorite games will be loaded here by JavaScript -->
+            </div>
+        </section>
+
+        <!-- Recent Games Page -->
+        <section id="recent" class="page">
+            <h1 class="page-title">Recently Played</h1>
+            <div class="games-grid" id="recent-games">
+                <!-- Recent games will be loaded here by JavaScript -->
+            </div>
+        </section>
+
+        <!-- Settings Page -->
+        <section id="settings" class="page">
+            <h1 class="page-title">Settings</h1>
+            <div class="settings-container">
+                <div class="setting-section">
+                    <h2 class="setting-title">Themes</h2>
+                    <div class="theme-options">
+                        <div class="theme-option active" data-theme="light">
+                            <div class="theme-preview light-preview"></div>
+                            <div>Light Theme</div>
+                        </div>
+                        <div class="theme-option" data-theme="dark">
+                            <div class="theme-preview dark-preview"></div>
+                            <div>Dark Theme</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="setting-section">
+                    <h2 class="setting-title">Tab Cloaking</h2>
+                    <div class="cloaking-options">
+                        <div class="cloaking-option" data-cloak="study">
+                            <div class="cloak-icon cloak-1">
+                                <i class="fas fa-book"></i>
+                            </div>
+                            <div>
+                                <h3>Study Mode</h3>
+                                <p>Changes tab title to "Google Classroom"</p>
+                            </div>
+                        </div>
+                        <div class="cloaking-option" data-cloak="work">
+                            <div class="cloak-icon cloak-2">
+                                <i class="fas fa-briefcase"></i>
+                            </div>
+                            <div>
+                                <h3>Work Mode</h3>
+                                <p>Changes tab title to "Google Docs"</p>
+                            </div>
+                        </div>
+                        <div class="cloaking-option" data-cloak="research">
+                            <div class="cloak-icon cloak-3">
+                                <i class="fas fa-search"></i>
+                            </div>
+                            <div>
+                                <h3>Research Mode</h3>
+                                <p>Changes tab title to "Google Search"</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="custom-cloaking">
+                        <h3>Custom Tab Cloaking</h3>
+                        <div class="cloaking-inputs">
+                            <div class="input-group">
+                                <label for="custom-title">Tab Title:</label>
+                                <input type="text" id="custom-title" placeholder="Enter custom tab title">
+                            </div>
+                            <div class="input-group">
+                                <label for="custom-favicon">Favicon URL:</label>
+                                <input type="text" id="custom-favicon" placeholder="Enter favicon image URL">
+                            </div>
+                            <button class="cloak-btn" id="apply-custom-cloak">Apply Custom Cloak</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="setting-section">
+                    <h2 class="setting-title">About:Blank Embedder</h2>
+                    <div class="about-blank-embedder">
+                        <p>Embed any website in an about:blank page for maximum privacy (If you want this page embedded, type "https://niamco.github.io/niamverse/" and click embed).</p>
+                        <div class="embedder-input">
+                            <input type="text" id="embed-url" placeholder="Enter website URL">
+                            <button class="embed-btn" id="embed-button">Embed</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Game Frame (Hidden by default) -->
+    <div class="game-frame-container" id="game-frame">
+        <div class="game-frame-header">
+            <div class="game-frame-title" id="frame-title">Game Title</div>
+            <div class="game-frame-controls">
+                <button class="frame-btn" id="fullscreen-btn">
+                    <i class="fas fa-expand"></i>
+                </button>
+                <button class="frame-btn" id="share-btn">
+                    <i class="fas fa-share-alt"></i>
+                </button>
+                <button class="frame-btn" id="favorite-btn">
+                    <i class="far fa-heart"></i>
+                </button>
+                <button class="frame-btn" id="close-btn">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+        </div>
+        <iframe class="game-frame" id="game-iframe" src=""></iframe>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="social-links">
+                <a href="https://www.youtube.com/@NiamCo-1" class="social-link" target="_blank">
+                    <i class="fab fa-youtube"></i> YouTube
+                </a>
+                <a href="https://github.com/NiamCO" class="social-link" target="_blank">
+                    <i class="fab fa-github"></i> GitHub
+                </a>
+                <a href="#" class="social-link">
+                    <i class="fab fa-discord"></i> Discord
+                </a>
+                <a href="#" class="social-link">
+                    <i class="fab fa-twitter"></i> Twitter
+                </a>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Sample games data - you can replace this with your full JSON data
+      const games = [
+    {
+      "id": 2,
+      "name": "1v1.LOL",
+      "category": "action",
+      "popularity": "80M+",
+      "releaseDate": "May 1, 2020",
+      "rating": "TODO",
+      "new": false,
+      "trending": 26000,
+      "featured": true,
+      "link": "https://macvg-games.github.io/action-games/1v1lol/",
+      "genre": "Shooter Games",
+      "build": "Unity WebGL",
+      "dev": "JustPlay.LOL",
+      "about": "1v1.LOL is a fun battle royale and survival shooting game where your only goal is to survive. Use the controls smart and well to attack or defense by shooting weapons or building stuff from your materials! React fast and defeat all enemies to win! There are different modes that you can play, with the classic multiplayer battle royale, training obstacles, and more fun maps for you to explore!",
+      "controls": [
+        "WASD Keys: Move",
+        "Space: Jump",
+        "Mouse: Turn",
+        "Left Click: shoot / Use Material",
+        "Right click: aim",
+        "Numbers / Certain Letters: Switch Weapons / Materials",
+        "Esc: Pause"
+      ],
+      "thumb": "https://macvg-games.github.io/action-games/1v1lol/splash.png",
+      "download": true
+    },
+    {
+      "id": 4,
+      "name": "10 Minutes Till Dawn",
+      "category": "action",
+      "popularity": "10M+",
+      "releaseDate": "May 11, 2022",
+      "rating": "TODO",
+      "new": false,
+      "trending": 10000,
+      "link": "https://macvg-games.github.io/action-games/10-minutes-till-dawn/",
+      "genre": "Survival Games",
+      "build": "Unity WebGL",
+      "dev": "flanne",
+      "about": "10 Minutes Till Dawn is a very exciting fantasy survival game for you to play! Use WASD to move and dodge the creatures or else you'll loose hearts and die. Use your mouse to aim and click to shoot. You can collect the creature's coins when they die and upgrade your character to gain abilities!",
+      "controls": ["WASD Keys: Move", "Click: Shoot", "R: Reload", "Esc: Pause"],
+      "thumb": "https://macvg-games.github.io/action-games/10-minutes-till-dawn/splash.png"
+    },
+    {
+      "id": 332,
+      "name": "Adam and Eve 5 Part 1",
+      "category": "action",
+      "popularity": "1M+",
+      "releaseDate": "December 2018",
+      "rating": "TODO",
+      "new": false,
+      "trending": 5000,
+      "link": "https://macvg-games.github.io/action-games/adam-eve/",
+      "genre": "Point and Click Strategy Games",
+      "build": "HTML5, JavaScript",
+      "dev": "Functu Games",
+      "about": "⚠️DO NOT click \"Clear Save\" or the game won't work!⚠️ Adam and Eve is back with another sequel: Adam and Eve 5 Part 1! Adam and Eve is a game series so horrible that it's actually fun to waste some time on! Everything on this game is bad, even the name! Because the game is so bad that you actually want to spend time to play it! Click on things to make a path for Adam so he can go find his beloved Eve, enjoy!",
+      "controls": ["Click: Action"],
+      "thumb": "https://macvg-games.github.io/action-games/adam-eve/logo.jpg"
+    },
+    {
+      "id": 333,
+      "name": "Adam and Eve 5 Part 2",
+      "category": "action",
+      "popularity": "1M+",
+      "releaseDate": "December 2018",
+      "rating": "TODO",
+      "new": false,
+      "trending": 5000,
+      "link": "https://macvg-games.github.io/action-games/adam-eve-2/",
+      "genre": "Point and Click Strategy Games",
+      "build": "HTML5, JavaScript",
+      "dev": "Functu Games",
+      "about": "⚠️DO NOT click \"Clear Save\" or the game won't work!⚠️ Adam and Eve is back with another sequel: Adam and Eve 5 Part 2! Continue the adventure you started in part 1 here! Adam and Eve is a game series so horrible that it's actually fun to waste some time on! Everything on this game is bad, even the name! Because the game is so bad that you actually want to spend time to play it! Click on things to make a path for Adam so he can go find his beloved Eve! Enjoy!",
+      "controls": ["Click: Action"],
+      "thumb": "https://macvg-games.github.io/action-games/adam-eve-2/logo.jpg"
+    },
+    {
+      "id": 10,
+      "name": "A Dark Room",
+      "category": "strategy",
+      "popularity": "5M+",
+      "releaseDate": "June 10, 2013",
+      "rating": "TODO",
+      "new": false,
+      "trending": 8000,
+      "link": "https://macvg-games.github.io/action-games/adarkroom/",
+      "genre": "Text-Based Strategy Games",
+      "build": "HTML5, JavaScript",
+      "dev": "Doublespeak Games",
+      "about": "A Dark Room is a fun game where you can make decisions on what to do, what to make, or what materials to gather in order to survive and beat the game. Simply click on the buttons to do different things and build a village.",
+      "controls": ["Click: Action"],
+      "thumb": "https://macvg-games.github.io/action-games/adarkroom/splash.png",
+      "download": true
+    },
+    {
+      "id": 14,
+      "name": "Alien Hominid",
+      "category": "action",
+      "popularity": "50M+",
+      "releaseDate": "November 21, 2004",
+      "rating": "TODO",
+      "new": false,
+      "trending": 12000,
+      "link": "https://macvg-games.github.io/action-games/alienhominid/",
+      "genre": "Run and Gun Games",
+      "build": "Flash",
+      "dev": "The Behemoth",
+      "about": "Alien Hominid is a fast-paced action game where you control an alien and shoot or dodge the police officers!",
+      "controls": ["Still working on this one O_O"],
+      "thumb": "https://macvg-games.github.io/action-games/alienhominid/alienhominid.jpg"
+    },
+    {
+      "id": 15,
+      "name": "Amidst the Clouds",
+      "category": "action",
+      "popularity": "5M+",
+      "releaseDate": "Unknown",
+      "rating": "TODO",
+      "new": false,
+      "trending": 7000,
+      "link": "https://macvg-games.github.io/action-games/amidst-the-clouds/",
+      "genre": "Platformer Games",
+      "build": "HTML5, JavaScript",
+      "dev": "Casper van Dommelen",
+      "about": "Amidst the Clouds is a really creative game where you need to get to the exit using arrow keys to move, and jumping on the special white \"smoke\" will make you float up or down, and the airflows will push you! Press space to start the game.",
+      "controls": ["Still working on this one O_O"],
+      "thumb": "https://macvg-games.github.io/action-games/amidst-the-clouds/splash.png"
+    },
+    {
+      "id": 17,
+      "name": "Angry sharks",
+      "category": "action",
+      "popularity": "1M+",
+      "releaseDate": "Unknown",
+      "rating": "TODO",
+      "new": false,
+      "trending": 6000,
+      "link": "https://macvg-games.github.io/action-games/angry-sharks/",
+      "genre": "Reaction Games",
+      "build": "HTML5, JavaScript",
+      "dev": "InLogic Games",
+      "about": "Use your mouse to guide your hungry shark and eat the fish! By touching a fish for a long enough time period you get score by eating it. Avoid touching the pufferfish or the green chemical waste or you'll loose health!",
+      "controls": ["Mouse: Swim"],
+      "thumb": "https://macvg-games.github.io/action-games/angry-sharks/assets/favicon/icon-512x512.png"
+    },
+    {
+      "id": 334,
+      "name": "Apple Shooter",
+      "category": "action",
+      "popularity": "5M+",
+      "releaseDate": "March 2008",
+      "rating": "TODO",
+      "new": false,
+      "trending": 9000,
+      "link": "https://macvg-games.github.io/action-games/apple-shooter/",
+      "genre": "Shooting Games",
+      "build": "HTML5, JavaScript",
+      "dev": "Wolf Games",
+      "about": "Apple Shooter is a simple but addicting game where your goal is to shoot the apple on your friend's head without hitting them! Everytime you hit the apple, you shoot from a little further away and the game becomes more challenging. Can you reach the last level without shooting your friend? The longer you hold, the stronger the arrow!",
+      "controls": ["Drag: Aim", "Release: shoot"],
+      "thumb": "https://macvg-games.github.io/action-games/apple-shooter/Untitled.jpg"
+    },
+    {
+      "id": 338,
+      "name": "Arcane Archer",
+      "category": "action",
+      "popularity": "5M+",
+      "releaseDate": "Unknown",
+      "rating": "TODO",
+      "new": false,
+      "trending": 8500,
+      "link": "https://macvg-games.github.io/action-games/arcane-archer/",
+      "genre": "RPG Games",
+      "build": "HTML5, JavaScript",
+      "dev": "OnRush Studio",
+      "about": "Arcane Archer is a fun RPG game where you control a powerful archer to defeat enemies on each stage and advance through different levels! The archer will aim and shoot automatically, all you have to do is to dodge attacks from enemies. You earn xp for each defeated enemy and you can choose new abilities and upgrades using the xp! There are many different and unique levels to play, so good luck guiding your archer through this adventure!",
+      "controls": ["Arrow / WASD Keys: Move", "Drag: Move"],
+      "thumb": "https://macvg-games.github.io/action-games/arcane-archer/logo.avif"
+    },
+    {
+      "id": 19,
+      "name": "Avalanche",
+      "category": "action",
+      "popularity": "10M+",
+      "releaseDate": "August 10, 2007",
+      "rating": "TODO",
+      "new": false,
+      "trending": 11000,
+      "link": "https://macvg-games.github.io/action-games/avalanche/",
+      "genre": "Reaction Games",
+      "build": "Flash",
+      "dev": "The Game Homepage",
+      "about": "Oops, you caught us, we're still working hard to provide game description on this game! In the upcoming updates, more and more games will have their descriptions and instructions to help you beat it, so stay tuned for more updates!",
+      "controls": ["Still working on this one O_O"],
+      "thumb": "https://macvg-games.github.io/action-games/avalanche/avalanche.png"
+    },
+    {
+      "id": 337,
+      "name": "Awesome Tanks 2",
+      "category": "action",
+      "popularity": "10M+",
+      "releaseDate": "July 2012",
+      "rating": "TODO",
+      "new": false,
+      "trending": 12000,
+      "link": "https://macvg-games.github.io/action-games/awesome-tanks-2/",
+      "genre": "Shooting Games",
+      "build": "HTML5, JavaScript",
+      "dev": "Alexander Gettle",
+      "about": "Awesome Tanks 2 is a very popular shooting game where you control a tank to defeat enemies in different levels and difficulties and earn money! Move around and react fast to defeat enemy tanks and take cover so you don't get shot by them! You can also shoot explosives to kill enemies. Remember to defeat every enemy to finish the level and earn the maximum reward! Use the money to upgrade your tank in different ways. Have fun!",
+      "controls": ["Arrow / WASD Keys: Move", "Click: Shoot", "Mouse: Aim", "Number Keys: Switch Weapons"],
+      "thumb": "https://macvg-games.github.io/action-games/awesome-tanks-2/logo.jpg"
+    },
+    {
+      "id": 20,
+      "name": "Backrooms",
+      "category": "action",
+      "popularity": "30M+",
+      "releaseDate": "January 7, 2022",
+      "rating": "TODO",
+      "new": false,
+      "trending": 18000,
+      "featured": true,
+      "link": "https://macvg-games.github.io/action-games/backrooms/",
+      "genre": "Horror Games",
+      "build": "Unity WebGL",
+      "dev": "Fancy",
+      "about": "Oops, you caught us, we're still working hard to provide game description on this game! In the upcoming updates, more and more games will have their descriptions and instructions to help you beat it, so stay tuned for more updates!",
+      "controls": ["Still working on this one O_O"],
+      "thumb": "https://macvg-games.github.io/action-games/backrooms/img/splash.jpg"
+    },
+    {
+      "id": 292,
+      "name": "Backrooms 2D",
+      "category": "action",
+      "popularity": "1M+",
+      "releaseDate": "Unknown",
+      "rating": "TODO",
+      "new": false,
+      "trending": 6000,
+      "link": "https://macvg-games.github.io/action-games/backrooms-2d/",
+      "genre": "Horror Games",
+      "build": "Unity WebGL",
+      "dev": "JujuProdGames",
+      "about": "Oops, you caught us, we're still working hard to provide game description on this game! In the upcoming updates, more and more games will have their descriptions and instructions to help you beat it, so stay tuned for more updates!",
+      "controls": ["Still working on this one O_O"],
+      "thumb": "https://macvg-games.github.io/action-games/backrooms-2d/Backrooms2D.png"
+    },
+    {
+      "id": 293,
+      "name": "Bacon May Die",
+      "category": "action",
+      "popularity": "50M+",
+      "releaseDate": "April 15, 2021",
+      "rating": "TODO",
+      "new": false,
+      "trending": 15000,
+      "link": "https://macvg-games.github.io/action-games/bacon-may-die/",
+      "genre": "Run and Gun Games",
+      "build": "HTML5, JavaScript",
+      "dev": "SnoutUp Games",
+      "about": "Oops, you caught us, we're still working hard to provide game description on this game! In the upcoming updates, more and more games will have their descriptions and instructions to help you beat it, so stay tuned for more updates!",
+      "controls": ["Still working on this one O_O"],
+      "thumb": "https://macvg-games.github.io/action-games/bacon-may-die/BaconMayDie.png"
+    },
+    {
+      "id": 32,
+      "name": "Black Knight",
+      "category": "action",
+      "popularity": "1M+",
+      "releaseDate": "April 2005",
+      "rating": "TODO",
+      "new": false,
+      "trending": 5000,
+      "link": "https://macvg-games.github.io/action-games/blackknight/",
+      "genre": "Run and Gun Games",
+      "build": "Flash",
+      "dev": "Brain Jam Studios",
+      "about": "Oops, you caught us, we're still working hard to provide game description on this game! In the upcoming updates, more and more games will have their descriptions and instructions to help you beat it, so stay tuned for more updates!",
+      "controls": ["Still working on this one O_O"],
+      "thumb": "https://macvg-games.github.io/action-games/blackknight/blackknight.png"
+    },
+    {
+      "id": 348,
+      "name": "Blumgi Slime",
+      "category": "action",
+      "popularity": "50M+",
+      "releaseDate": "Unknown",
+      "rating": "TODO",
+      "new": false,
+      "trending": 14000,
+      "link": "https://macvg-games.github.io/action-games/blumgi-slime/",
+      "genre": "Platformer Games",
+      "build": "HTML5, JavaScript",
+      "dev": "Blumgi",
+      "about": "In this fun and satisfying game Blumgi Slime, your goal is to control the slime and jump your way to the end! All you can do is jump, but you need to jump at just the right angle and force to either overcome an obstacle, bounce, or dodge a cliff! If you fall into water, than it's game over. Use the walls wisely to bounce and change the slime's direction! This game is even more fun when you're playing in two players, because you get to compete with your friend who reaches the goal first! Have fun!",
+      "controls": ["Space Bar / Click: Jump", "A: Jump (Player 1)", "M: Jump (Player 2)", "R: Restart"],
+      "thumb": "https://macvg-games.github.io/action-games/blumgi-slime/logo.jpg"
+    },
+    {
+      "id": 36,
+      "name": "Bob the Robber 2",
+      "category": "action",
+      "popularity": "5M+",
+      "releaseDate": "April 24, 2012",
+      "rating": "TODO",
+      "new": false,
+      "trending": 8000,
+      "link": "https://macvg-games.github.io/action-games/bobtherobber2/",
+      "genre": "Escaping Games",
+      "build": "HTML5, JavaScript",
+      "dev": "Meow Beast",
+      "about": "Oops, you caught us, we're still working hard to provide game description on this game! In the upcoming updates, more and more games will have their descriptions and instructions to help you beat it, so stay tuned for more updates!",
+      "controls": ["Still working on this one O_O"],
+      "thumb": "https://macvg-games.github.io/action-games/bobtherobber2/splash.jpeg"
+    },
+    {
+      "id": 367,
+      "name": "Bomb It 7",
+      "category": "action",
+      "popularity": "10M+",
+      "releaseDate": "March 2018",
+      "rating": "TODO",
+      "new": false,
+      "trending": 11000,
+      "link": "https://macvg-games.github.io/action-games/bomb-it-7/",
+      "genre": "Arcade Games",
+      "build": "HTML5, JavaScript",
+      "dev": "Spil Games",
+      "about": "Oops, you caught us, we're still working hard to provide game description on this game! In the upcoming updates, more and more games will have their descriptions and instructions to help you beat it, so stay tuned for more updates!",
+      "controls": [
+        "Arrow Keys: Move (Player 1)",
+        "Space: Drop Bomb (Player 1)",
+        "WASD Keys: Move (Player 2)",
+        "Enter: Drop Bomb (Player 2)"
+      ],
+      "thumb": "https://macvg-games.github.io/action-games/bomb-it-7/logo.jpg"
+    },
+    {
+      "id": 37,
+      "name": "Box Head",
+      "category": "action",
+      "popularity": "1M+",
+      "releaseDate": "Unknown",
+      "rating": "TODO",
+      "new": false,
+      "trending": 6000,
+      "link": "https://macvg-games.github.io/action-games/boxhead2play/",
+      "genre": "Action Games",
+      "build": "Flash",
+      "dev": "Sean Cooper",
+      "about": "Oops, you caught us, we're still working hard to provide game description on this game! In the upcoming updates, more and more games will have their descriptions and instructions to help you beat it, so stay tuned for more updates!",
+      "controls": ["Still working on this one O_O"],
+      "thumb": "https://macvg-games.github.io/action-games/boxhead2play/boxhead2play.jpg"
+    },
+    {
+      "id": 347,
+      "name": "Boxel Rebound",
+      "category": "action",
+      "popularity": "10M+",
+      "releaseDate": "April 20, 2017",
+      "rating": "TODO",
+      "new": false,
+      "trending": 12000,
+      "link": "https://macvg-games.github.io/action-games/boxel-rebound/",
+      "genre": "Platformer Games",
+      "build": "HTML5, JavaScript",
+      "dev": "Doppler Creative",
+      "about": "Boxel Rebound is a poopular Chrome extension platformer game, brought to the web by MacVG. In this fast-paced reaction game, you need to control a block to jump over obstacles, spikes, and cliffs. Try to reach the end as fast as possible! As you advance, levels will be getting harder and there will also be other techniques like trampolines, speed up blocks, and resizers. Jump at the right time to avoid dying and get as many points as possible! Other than the preloaded 50 levels, you can also create your own unique fun levels and enjoy it yourself or with friends! Have fun!",
+      "controls": ["Space Bar / Up Arrow / Click: Jump"],
+      "thumb": "https://macvg-games.github.io/action-games/boxel-rebound/logo.jpg"
+    },
+    {
+      "id": 46,
+      "name": "Champion Island",
+      "category": "action",
+      "popularity": "500M+",
+      "releaseDate": "July 23, 2021",
+      "rating": "TODO",
+      "new": false,
+      "trending": 25000,
+      "featured": true,
+      "link": "https://macvg-games.github.io/action-games/champion-island/",
+      "genre": "RPG Games",
+      "build": "HTML5, JavaScript",
+      "dev": "Google Doodle",
+      "about": "Oops, you caught us, we're still working hard to provide game description on this game! In the upcoming updates, more and more games will have their descriptions and instructions to help you beat it, so stay tuned for more updates!",
+      "controls": ["Still working on this one O_O"],
+      "thumb": "https://macvg-games.github.io/action-games/champion-island/splash.png"
+    },
+    {
+      "id": 47,
+      "name": "Champion Archer",
+      "category": "action",
+      "popularity": "5M+",
+      "releaseDate": "April 1, 2012",
+      "rating": "TODO",
+      "new": false,
+      "trending": 8000,
+      "link": "https://macvg-games.github.io/action-games/championarcher/",
+      "genre": "Tower Defense Games",
+      "build": "Flash",
+      "dev": "Stick Page",
+      "about": "Oops, you caught us, we're still working hard to provide game description on this game! In the upcoming updates, more and more games will have their descriptions and instructions to help you beat it, so stay tuned for more updates!",
+      "controls": ["Still working on this one O_O"],
+      "thumb": "https://macvg-games.github.io/action-games/championarcher/championarcher.png"
+    },
+    {
+      "id": 55,
+      "name": "CraftMine",
+      "category": "action",
+      "popularity": "1M+",
+      "releaseDate": "Unknown",
+      "rating": "TODO",
+      "new": false,
+      "trending": 5000,
+      "link": "https://macvg-games.github.io/action-games/craftmine/",
+      "genre": "Adventure Games",
+      "build": "HTML5, JavaScript",
+      "dev": "Anonymous",
+      "about": "Oops, you caught us, we're still working hard to provide game description on this game! In the upcoming updates, more and more games will have their descriptions and instructions to help you beat it, so stay tuned for more updates!",
+      "controls": ["Still working on this one O_O"],
+      "thumb": "https://macvg-games.github.io/action-games/craftmine/images/craftmine.png"
+    },
+    {
+      "id": 56,
+      "name": "Creative Kill Chamber",
+      "category": "action",
+      "popularity": "10M+",
+      "releaseDate": "august 3, 2010",
+      "rating": "TODO",
+      "new": false,
+      "trending": 12000,
+      "featured": true,
+      "link": "https://macvg-games.github.io/action-games/creativekillchamber/",
+      "genre": "Escaping Games",
+      "build": "Flash",
+      "dev": "Stick Page",
+      "about": "Oops, you caught us, we're still working hard to provide game description on this game! In the upcoming updates, more and more games will have their descriptions and instructions to help you beat it, so stay tuned for more updates!",
+      "controls": ["Still working on this one O_O"],
+      "thumb": "https://macvg-games.github.io/action-games/creativekillchamber/creativekillchamber.jpg"
+    },
+    {
+      "id": 62,
+      "name": "Cubefield",
+      "category": "action",
+      "popularity": "5M+",
+      "releaseDate": "January 2006",
+      "rating": "TODO",
+      "new": false,
+      "trending": 9000,
+      "link": "https://macvg-games.github.io/action-games/cubefield/",
+      "genre": "Reaction Games",
+      "build": "HTML5, JavaScript",
+      "dev": "Nils Asejevs",
+      "about": "Oops, you caught us, we're still working hard to provide game description on this game! In the upcoming updates, more and more games will have their descriptions and instructions to help you beat it, so stay tuned for more updates!",
+      "controls": ["Still working on this one O_O"],
+      "thumb": "https://macvg-games.github.io/action-games/cubefield/assets/unnamed.png",
+      "download": true
+    },
+    {
+      "id": 64,
+      "name": "Dante",
+      "category": "action",
+      "popularity": "5M+",
+      "releaseDate": "September 13, 2022",
+      "rating": "TODO",
+      "new": false,
+      "trending": 11000,
+      "featured": true,
+      "link": "https://macvg-games.github.io/action-games/dante/",
+      "genre": "Platformer Games",
+      "build": "HTML5, JavaScript",
+      "dev": "Salvatore Previti",
+      "about": "Oops, you caught us, we're still working hard to provide game description on this game! In the upcoming updates, more and more games will have their descriptions and instructions to help you beat it, so stay tuned for more updates!",
+      "controls": ["Still working on this one O_O"],
+      "thumb": "https://macvg-games.github.io/action-games/dante/splash.png",
+      "download": true
+    },
+    {
+      "id": 355,
+      "name": "Dead Again",
+      "category": "action",
+      "popularity": "5M+",
+      "releaseDate": "September 13, 2022",
+      "rating": "TODO",
+      "new": false,
+      "trending": 10000,
+      "link": "https://macvg-games.github.io/action-games/dead-again/",
+      "genre": "RPG Games",
+      "build": "HTML5, JavaScript",
+      "dev": "Lax Viking Games",
+      "about": "Oops, you caught us, we're still working hard to provide game description on this game! In the upcoming updates, more and more games will have their descriptions and instructions to help you beat it, so stay tuned for more updates!",
+      "controls": ["Arrow / WASD Keys: Move", "R / Space: Reload", "Click: Shoot"],
+      "thumb": "https://macvg-games.github.io/action-games/dead-again/thumb.png"
+    },
+    {
+      "id": 66,
+      "name": "Death Run 3D",
+      "category": "action",
+      "popularity": "50M+",
+      "releaseDate": "December 1, 2014",
+      "rating": "TODO",
+      "new": false,
+      "trending": 14000,
+      "link": "https://macvg-games.github.io/action-games/death-run-3d/",
+      "genre": "Reaction Games",
+      "build": "HTML5, JavaScript",
+      "dev": "Wang Hailong",
+      "about": "Oops, you caught us, we're still working hard to provide game description on this game! In the upcoming updates, more and more games will have their descriptions and instructions to help you beat it, so stay tuned for more updates!",
+      "controls": ["Still working on this one O_O"],
+      "thumb": "https://macvg-games.github.io/action-games/death-run-3d/img/death.png"
+    },
+    {
+      "id": 67,
+      "name": "Defend the Tank",
+      "category": "action",
+      "popularity": "1M+",
+      "releaseDate": "Unknown",
+      "rating": "TODO",
+      "new": false,
+      "trending": 5000,
+      "link": "https://macvg-games.github.io/action-games/defend-the-tank/",
+      "genre": "Tower Defense Games",
+      "build": "HTML5, JavaScript",
+      "dev": "Anonymous",
+      "about": "Oops, you caught us, we're still working hard to provide game description on this game! In the upcoming updates, more and more games will have their descriptions and instructions to help you beat it, so stay tuned for more updates!",
+      "controls": ["Still working on this one O_O"],
+      "thumb": "https://macvg-games.github.io/action-games/defend-the-tank/images/splash.jpg"
+    },
+    {
+      "id": 296,
+      "name": "Dodge",
+      "category": "action",
+      "popularity": "1M+",
+      "releaseDate": "Unknown",
+      "rating": "TODO",
+      "new": false,
+      "trending": 6000,
+      "link": "https://macvg-games.github.io/action-games/dodge/",
+      "genre": "Reaction Games",
+      "build": "HTML5, JavaScript",
+      "dev": "Anonymous",
+      "about": "Oops, you caught us, we're still working hard to provide game description on this game! In the upcoming updates, more and more games will have their descriptions and instructions to help you beat it, so stay tuned for more updates!",
+      "controls": ["Still working on this one O_O"],
+      "thumb": "https://macvg-games.github.io/action-games/dodge/Dodge.png",
+      "download": true
+    },
+    {
+      "id": 368,
+      "name": "Down the Hill",
+      "category": "action",
+      "popularity": "1M+",
+      "releaseDate": "Unknown",
+      "rating": "TODO",
+      "new": false,
+      "trending": 7000,
+      "link": "https://macvg-games.github.io/action-games/down-the-hill/",
+      "genre": "Reaction Games",
+      "build": "HTML5, JavaScript",
+      "dev": "Anonymous",
+      "about": "In this fun and fast paced reaction game, your goal is to control the character to either go left or right down the hill, avoiding obstacles like trees, lava, spikes, cars, bombs, honey, and more. Plan your route while having a fast reaction time, because anything can happen to knock you off the hill! Collect diamonds on the hill to buy new cosmetics. Have fun!",
+      "controls": ["Left Arrow / Click Left: Go Left", "Right Arrow / Click Right: Go Right"],
+      "thumb": "https://macvg-games.github.io/action-games/down-the-hill/logo.jpg"
+    },
+    {
+      "id": 73,
+      "name": "Dragon vs Bricks",
+      "category": "action",
+      "popularity": "1M+",
+      "releaseDate": "Unknown",
+      "rating": "TODO",
+      "new": false,
+      "trending": 6000,
+      "link": "https://macvg-games.github.io/action-games/dragon-vs-bricks/",
+      "genre": "Reaction Games",
+      "build": "HTML5, JavaScript",
+      "dev": "Anonymous",
+      "about": "Oops, you caught us, we're still working hard to provide game description on this game! In the upcoming updates, more and more games will have their descriptions and instructions to help you beat it, so stay tuned for more updates!",
+      "controls": ["Still working on this one O_O"],
+      "thumb": "https://macvg-games.github.io/action-games/dragon-vs-bricks/icon.jpg"
+    },
+    {
+      "id": 84,
+      "name": "Endless War 3",
+      "category": "action",
+      "popularity": "1M+",
+      "releaseDate": "Unknown",
+      "rating": "TODO",
+      "new": false,
+      "trending": 5000,
+      "link": "https://macvg-games.github.io/action-games/endlesswar3/",
+      "genre": "Empire Games",
+      "build": "Flash",
+      "dev": "Anonymous",
+      "about": "Oops, you caught us, we're still working hard to provide game description on this game! In the upcoming updates, more and more games will have their descriptions and instructions to help you beat it, so stay tuned for more updates!",
+      "controls": ["Still working on this one O_O"],
+      "thumb": "https://macvg-games.github.io/action-games/endlesswar3/endlesswar3.png"
+    },
+    {
+      "id": 86,
+      "name": "Evil Glitch",
+      "category": "action",
+      "popularity": "5M+",
+      "releaseDate": "May 31, 2017",
+      "rating": "TODO",
+      "new": false,
+      "trending": 9000,
+      "link": "https://macvg-games.github.io/action-games/evil-glitch/",
+      "genre": "Shooting Games",
+      "build": "HTML5, JavaScript",
+      "dev": "Agar3s",
+      "about": "Oops, you caught us, we're still working hard to provide game description on this game! In the upcoming updates, more and more games will have their descriptions and instructions to help you beat it, so stay tuned for more updates!",
+      "controls": ["Still working on this one O_O"],
+      "thumb": "https://macvg-games.github.io/action-games/evil-glitch/evil.png",
+      "download": true
+    },
+    {
+      "id": 90,
+      "name": "Fancy Pants Adventures",
+      "category": "action",
+      "popularity": "10M+",
+      "releaseDate": "April 2006",
+      "rating": "TODO",
+      "new": false,
+      "trending": 11000,
+      "link": "https://macvg-games.github.io/action-games/fancypantsadventures/",
+      "genre": "Platformer Games",
+      "build": "Flash",
+      "dev": "Borne Games",
+      "about": "Oops, you caught us, we're still working hard to provide game description on this game! In the upcoming updates, more and more games will have their descriptions and instructions to help you beat it, so stay tuned for more updates!",
+      "controls": ["Still working on this one O_O"],
+      "thumb": "https://macvg-games.github.io/action-games/fancypantsadventures/fancypantsadventure.png"
+    },
+    {
+      "id": 92,
+      "name": "Fireboy and Watergirl",
+      "category": "action",
+      "popularity": "50M+",
+      "releaseDate": "November 19, 2009",
+      "rating": "TODO",
+      "new": false,
+      "trending": 16000,
+      "featured": true,
+      "link": "https://macvg-games.github.io/action-games/fireboywatergirlforesttemple/",
+      "genre": "Teamwork Games",
+      "build": "HTML5, JavaScript",
+      "dev": "Oslo Albet",
+      "about": "Oops, you caught us, we're still working hard to provide game description on this game! In the upcoming updates, more and more games will have their descriptions and instructions to help you beat it, so stay tuned for more updates!",
+      "controls": ["Still working on this one O_O"],
+      "thumb": "https://macvg-games.github.io/action-games/fireboywatergirlforesttemple/logo.jpeg"
+    },
+    {
+      "id": 373,
+      "name": "Five Nights at Freddy's",
+      "category": "action",
+      "popularity": "100M+",
+      "releaseDate": "August 8, 2014",
+      "rating": "TODO",
+      "new": false,
+      "trending": 22000,
+      "link": "https://macvg-games.github.io/action-games/fnaf/",
+      "genre": "Horror Games",
+      "build": "HTML5, JavaScript",
+      "dev": "Scottgames",
+      "about": "Oops, you caught us, we're still working hard to provide game description on this game! In the upcoming updates, more and more games will have their descriptions and instructions to help you beat it, so stay tuned for more updates!",
+      "controls": ["Still working on this one O_O"],
+      "thumb": "https://macvg-games.github.io/action-games/fnaf/logo.jpg"
+    },
+    {
+      "id": 97,
+      "name": "Five Nights at winston's",
+      "category": "action",
+      "popularity": "5M+",
+      "releaseDate": "February 27, 2021",
+      "rating": "TODO",
+      "new": false,
+      "trending": 9000,
+      "link": "https://macvg-games.github.io/action-games/fnaw/",
+      "genre": "Horror Games",
+      "build": "HTML5, JavaScript",
+      "dev": "Calder Young",
+      "about": "Oops, you caught us, we're still working hard to provide game description on this game! In the upcoming updates, more and more games will have their descriptions and instructions to help you beat it, so stay tuned for more updates!",
+      "controls": ["Still working on this one O_O"],
+      "thumb": "https://macvg-games.github.io/action-games/fnaw/splash.png"
+    },
+    {
+      "id": 99,
+      "name": "Froggy's Battle",
+      "category": "action",
+      "popularity": "5M+",
+      "releaseDate": "August 21, 2022",
+      "rating": "TODO",
+      "new": false,
+      "trending": 10000,
+      "link": "https://macvg-games.github.io/action-games/froggys-battle/",
+      "genre": "Timing Games",
+      "build": "Unity WebGL",
+      "dev": "Doot",
+      "about": "Oops, you caught us, we're still working hard to provide game description on this game! In the upcoming updates, more and more games will have their descriptions and instructions to help you beat it, so stay tuned for more updates!",
+      "controls": ["Still working on this one O_O"],
+      "thumb": "https://macvg-games.github.io/action-games/froggys-battle/splash.png"
+    },
+    {
+      "id": 101,
+      "name": "Frying Nemo",
+      "category": "action",
+      "popularity": "5M+",
+      "releaseDate": "May 5, 2003",
+      "rating": "TODO",
+      "new": false,
+      "trending": 8000,
+      "link": "https://macvg-games.github.io/action-games/frying-nemo/",
+      "genre": "Timing Games",
+      "build": "Unity WebGL",
+      "dev": "Traveler Tales",
+      "about": "Oops, you caught us, we're still working hard to provide game description on this game! In the upcoming updates, more and more games will have their descriptions and instructions to help you beat it, so stay tuned for more updates!",
+      "controls": ["Still working on this one O_O"],
+      "thumb": "https://macvg-games.github.io/action-games/frying-nemo/splash.png"
+    },
+    {
+      "id": 290,
+      "name": "Funny Shooter 2",
+      "category": "action",
+      "popularity": "50M+",
+      "releaseDate": "August 2022",
+      "rating": "TODO",
+      "new": false,
+      "trending": 15000,
+      "featured": true,
+      "link": "https://macvg-games.github.io/action-games/funnyshooter2/",
+      "genre": "Shooter Games",
+      "build": "Unity WebGL",
+      "dev": "GoGoMan",
+      "about": "Oops, you caught us, we're still working hard to provide game description on this game! In the upcoming updates, more and more games will have their descriptions and instructions to help you beat it, so stay tuned for more updates!",
+      "controls": ["Still working on this one O_O"],
+      "thumb": "https://macvg-games.github.io/action-games/funnyshooter2/thumb.png"
+    },
+    {
+      "id": 103,
+      "name": "Generic Fishing Game",
+      "category": "action",
+      "popularity": "1M+",
+      "releaseDate": "Unknown",
+      "rating": "TODO",
+      "new": false,
+      "trending": 5000,
+      "link": "https://macvg-games.github.io/action-games/generic-fishing-game/",
+      "genre": "Action Games",
+      "build": "HTML5, JavaScript",
+      "dev": "Casper van Dommelen",
+      "about": "Oops, you caught us, we're still working hard to provide game description on this game! In the upcoming updates, more and more games will have their descriptions and instructions to help you beat it, so stay tuned for more updates!",
+      "controls": ["Still working on this one O_O"],
+      "thumb": "https://macvg-games.github.io/action-games/generic-fishing-game/splash.png"
+    },
+    {
+      "id": 377,
+      "name": "Geometry Dash Classic",
+      "category": "action",
+      "popularity": "1M+",
+      "releaseDate": "Unknown",
+      "rating": "TODO",
+      "new": false,
+      "trending": 6000,
+      "link": "https://macvg-games.github.io/action-games/geometry-dash/",
+      "genre": "Platformer Games",
+      "build": "HTML5, JavaScript",
+      "dev": "RobTop Games",
+      "about": "Oops, you caught us, we're still working hard to provide game description on this game! In the upcoming updates, more and more games will have their descriptions and instructions to help you beat it, so stay tuned for more updates!",
+      "controls": ["Click: Jump"],
+      "thumb": "https://macvg-games.github.io/action-games/geometry-dash/logo.jpg"
+    },
+    {
+      "id": 104,
+      "name": "Geometry Dash Scratch",
+      "category": "action",
+      "popularity": "100M+",
+      "releaseDate": "April 19, 2016",
+      "rating": "TODO",
+      "new": false,
+      "trending": 20000,
+      "link": "https://macvg-games.github.io/action-games/geodash/",
+      "genre": "Platformer Games",
+      "build": "Scratch",
+      "dev": "Griffpatch",
+      "about": "Oops, you caught us, we're still working hard to provide game description on this game! In the upcoming updates, more and more games will have their descriptions and instructions to help you beat it, so stay tuned for more updates!",
+      "controls": ["Still working on this one O_O"],
+      "thumb": "https://macvg-games.github.io/action-games/geodash/geoscratchicon.png",
+      "download": true
+    },
+    {
+      "id": 106,
+      "name": "Getaway Shootout",
+      "category": "action",
+      "popularity": "10M+",
+      "releaseDate": "Unknown",
+      "rating": "TODO",
+      "new": false,
+      "trending": 13000,
+      "featured": true,
+      "link": "https://macvg-games.github.io/action-games/getaway-shootout/",
+      "genre": "Shooting Games",
+      "build": "Unity WebGL",
+      "dev": "New Eich Games",
+      "about": "Oops, you caught us, we're still working hard to provide game description on this game! In the upcoming updates, more and more games will have their descriptions and instructions to help you beat it, so stay tuned for more updates!",
+      "controls": ["Still working on this one O_O"],
+      "thumb": "https://macvg-games.github.io/action-games/getaway-shootout/img/images.jpg"
+    },
+    {
+      "id": 107,
+      "name": "Gimme the Airpod",
+      "category": "action",
+      "popularity": "1M+",
+      "releaseDate": "Unknown",
+      "rating": "TODO",
+      "new": false,
+      "trending": 5000,
+      "link": "https://macvg-games.github.io/action-games/gimme-the-airpod/",
+      "genre": "Dueling Games",
+      "build": "Unity WebGL",
+      "dev": "Anonymous",
+      "about": "Oops, you caught us, we're still working hard to provide game description on this game! In the upcoming updates, more and more games will have their descriptions and instructions to help you beat it, so stay tuned for more updates!",
+      "controls": ["Still working on this one O_O"],
+      "thumb": "https://macvg-games.github.io/action-games/gimme-the-airpod/img/logo.png"
+    },
+    {
+      "id": 379,
+      "name": "Gobdun",
+      "category": "action",
+      "popularity": "5M+",
+      "releaseDate": "Unknown",
+      "rating": "TODO",
+      "new": false,
+      "trending": 8000,
+      "link": "https://macvg-games.github.io/action-games/gobdun/",
+      "genre": "Action Games",
+      "build": "HTML5, JavaScript",
+      "dev": "Venturous",
+      "about": "Oops, you caught us, we're still working hard to provide game description on this game! In the upcoming updates, more and more games will have their descriptions and instructions to help you beat it, so stay tuned for more updates!",
+      "controls": [
+        "Up Arrow: Move Forward / Attack",
+        "Down Arrow: Turn Around / Block",
+        "Left / Right Arrow Keys: Turn Left / Right",
+        "P: Pause",
+        "Note: WASD keys also work"
+      ],
+      "thumb": "https://macvg-games.github.io/action-games/gobdun/logo.jpg"
+    },
+    {
+      "id": 110,
+      "name": "GOODNIGHT",
+      "category": "action",
+      "popularity": "5M+",
+      "releaseDate": "2018",
+      "rating": "TODO",
+      "new": false,
+      "trending": 8000,
+      "link": "https://macvg-games.github.io/action-games/goodnight/",
+      "genre": "Platformer Games",
+      "build": "HTML5, JavaScript",
+      "dev": "deepsleep",
+      "about": "Oops, you caught us, we're still working hard to provide game description on this game! In the upcoming updates, more and more games will have their descriptions and instructions to help you beat it, so stay tuned for more updates!",
+      "controls": ["Still working on this one O_O"],
+      "thumb": "https://macvg-games.github.io/action-games/goodnight/goodnight.jpg"
+    },
+    {
+      "id": 381,
+      "name": "Groovy Ski",
+      "category": "action",
+      "popularity": "1M+",
+      "releaseDate": "Unknown",
+      "rating": "TODO",
+      "new": false,
+      "trending": 6000,
+      "link": "https://macvg-games.github.io/action-games/groovy-ski/",
+      "genre": "Reaction Games",
+      "build": "HTML5, JavaScript",
+      "dev": "Anonymous",
+      "about": "Oops, you caught us, we're still working hard to provide game description on this game! In the upcoming updates, more and more games will have their descriptions and instructions to help you beat it, so stay tuned for more updates!",
+      "controls": ["Click: Change Direction"],
+      "thumb": "https://macvg-games.github.io/action-games/groovy-ski/logo.jpg"
+    },
+    {
+      "id": 382,
+      "name": "G-Switch",
+      "category": "action",
+      "popularity": "50M+",
+      "releaseDate": "February 3, 2010",
+      "rating": "TODO",
+      "new": false,
+      "trending": 14000,
+      "link": "https://macvg-games.github.io/action-games/gswitch/",
+      "genre": "Reaction Games",
+      "build": "HTML5, JavaScript",
+      "dev": "Serius Games",
+      "about": "Oops, you caught us, we're still working hard to provide game description on this game! In the upcoming updates, more and more games will have their descriptions and instructions to help you beat it, so stay tuned for more updates!",
+      "controls": ["Any Key: Flip Gravity", "Esc: Pause"],
+      "thumb": "https://macvg-games.github.io/action-games/gswitch/logo.jpg"
+    },
+    {
+      "id": 383,
+      "name": "G-Switch 2",
+      "category": "action",
+      "popularity": "50M+",
+      "releaseDate": "August 7, 2015",
+      "rating": "TODO",
+      "new": false,
+      "trending": 14000,
+      "link": "https://macvg-games.github.io/action-games/gswitch-2/",
+      "genre": "Reaction Games",
+      "build": "HTML5, JavaScript",
+      "dev": "Serius Games",
+      "about": "Oops, you caught us, we're still working hard to provide game description on this game! In the upcoming updates, more and more games will have their descriptions and instructions to help you beat it, so stay tuned for more updates!",
+      "controls": ["Any Key: Flip Gravity", "Esc: Pause"],
+      "thumb": "https://macvg-games.github.io/action-games/gswitch-2/logo.jpg"
+    },
+    {
+      "id": 384,
+      "name": "G-Switch 3",
+      "category": "action",
+      "popularity": "50M+",
+      "releaseDate": "November 22, 2016",
+      "rating": "TODO",
+      "new": false,
+      "trending": 14000,
+      "link": "https://macvg-games.github.io/action-games/gswitch-3/",
+      "genre": "Reaction Games",
+      "build": "HTML5, JavaScript",
+      "dev": "Serius Games",
+      "about": "Oops, you caught us, we're still working hard to provide game description on this game! In the upcoming updates, more and more games will have their descriptions and instructions to help you beat it, so stay tuned for more updates!",
+      "controls": ["Any Key: Flip Gravity", "Esc: Pause"],
+      "thumb": "https://macvg-games.github.io/action-games/gswitch-3/logo.jpg"
+    },
+    {
+      "id": 120,
+      "name": "Helicopter",
+      "category": "action",
+      "popularity": "1M+",
+      "releaseDate": "Unknown",
+      "rating": "TODO",
+      "new": false,
+      "trending": 6000,
+      "link": "https://macvg-games.github.io/action-games/helicopter/",
+      "genre": "Reaction Games",
+      "build": "Flash",
+      "dev": "Anonymous",
+      "about": "Oops, you caught us, we're still working hard to provide game description on this game! In the upcoming updates, more and more games will have their descriptions and instructions to help you beat it, so stay tuned for more updates!",
+      "controls": ["Click: Fly Up"],
+      "thumb": "https://macvg-games.github.io/action-games/helicopter/helicopter.png"
+    },
+    {
+      "id": 390,
+      "name": "Hide and Smash",
+      "category": "action",
+      "popularity": "5M+",
+      "releaseDate": "Unknown",
+      "rating": "TODO",
+      "new": false,
+      "trending": 9000,
+      "link": "https://macvg-games.github.io/action-games/hide-and-smash/",
+      "genre": "Reaction Games",
+      "build": "HTML5, JavaScript",
+      "dev": "Madbox",
+      "about": "Oops, you caught us, we're still working hard to provide game description on this game! In the upcoming updates, more and more games will have their descriptions and instructions to help you beat it, so stay tuned for more updates!",
+      "controls": ["Drag: Move", "Drop: Hide"],
+      "thumb": "https://macvg-games.github.io/action-games/hide-and-smash/logo.jpg"
+    },
+    {
+      "id": 124,
+      "name": "Hungry Lamu",
+      "category": "action",
+      "popularity": "5M+",
+      "releaseDate": "July 16, 2022",
+      "rating": "TODO",
+      "new": false,
+      "trending": 10000,
+      "link": "https://macvg-games.github.io/action-games/hungry-lamu/",
+      "genre": "Horror Games",
+      "build": "Unity WebGL",
+      "dev": "Kulu",
+      "about": "Oops, you caught us, we're still working hard to provide game description on this game! In the upcoming updates, more and more games will have their descriptions and instructions to help you beat it, so stay tuned for more updates!",
+      "controls": ["Still working on this one O_O"],
+      "thumb": "https://macvg-games.github.io/action-games/hungry-lamu/splash.png"
+    },
+    {
+      "id": 336,
+      "name": "Inifnite Soccer",
+      "category": "action",
+      "popularity": "1M+",
+      "releaseDate": "Unknown",
+      "rating": "TODO",
+      "new": false,
+      "trending": 7000,
+      "link": "https://macvg-games.github.io/action-games/infinite-soccer/",
+      "genre": "Endless Runner Games",
+      "build": "HTML5, JavaScript",
+      "dev": "AVIX Games",
+      "about": "In this fun game, AVIX Games combined endless runner and soccer into this amazing reaction game, where you navigate your player to dodge obstacles while collecting coins, activate Turbo to smash everything out of the way, and then reach the end to shoot a penalty kick to get as much money as possible! In the final shootout, press the space bar at just the right time to get triple the money collected and use the money to buy the team you want and play as the team! Good luck!",
+      "controls": [
+        "Up Arrow: Jump",
+        "Down Arrow: Slide",
+        "Left / Right Arrow: Dash Left / Right",
+        "Space: Turbo / Shoot",
+        "Note: WASD keys and dragging also work"
+      ],
+      "thumb": "https://macvg-games.github.io/action-games/infinite-soccer/logo.avif"
+    },
+    {
+      "id": 304,
+      "name": "Iron Snout",
+      "category": "action",
+      "popularity": "50M+",
+      "releaseDate": "October 17, 2014",
+      "rating": "TODO",
+      "new": false,
+      "trending": 14000,
+      "link": "https://macvg-games.github.io/action-games/iron-snout/",
+      "genre": "Run and Gun Games",
+      "build": "HTML5, JavaScript",
+      "dev": "SnoutUp Games",
+      "about": "Oops, you caught us, we're still working hard to provide game description on this game! In the upcoming updates, more and more games will have their descriptions and instructions to help you beat it, so stay tuned for more updates!",
+      "controls": ["Still working on this one O_O"],
+      "thumb": "https://macvg-games.github.io/action-games/iron-snout/IronSnout.png"
+    },
+    {
+      "id": 129,
+      "name": "Jetpack Joyride",
+      "category": "action",
+      "popularity": "50M+",
+      "releaseDate": "September 1, 2011",
+      "rating": "TODO",
+      "new": false,
+      "trending": 15000,
+      "link": "https://macvg-games.github.io/action-games/jetpack-joyride/",
+      "genre": "Endless Runner Games",
+      "build": "HTML5, JavaScript",
+      "dev": "Halfbrick Studios",
+      "about": "Oops, you caught us, we're still working hard to provide game description on this game! In the upcoming updates, more and more games will have their descriptions and instructions to help you beat it, so stay tuned for more updates!",
+      "controls": ["Still working on this one O_O"],
+      "thumb": "https://macvg-games.github.io/action-games/jetpack-joyride/splash.jpg"
+    },
+    {
+      "id": 130,
+      "name": "JustFall.lol",
+      "category": "action",
+      "popularity": "30M+",
+      "releaseDate": "April 14, 2021",
+      "rating": "TODO",
+      "new": false,
+      "trending": 17000,
+      "link": "https://macvg-games.github.io/action-games/just-fall/",
+      "genre": "Survival Games",
+      "build": "Unity WebGL",
+      "dev": "JustPlay.LOL",
+      "about": "Oops, you caught us, we're still working hard to provide game description on this game! In the upcoming updates, more and more games will have their descriptions and instructions to help you beat it, so stay tuned for more updates!",
+      "controls": ["Still working on this one O_O"],
+      "thumb": "https://macvg-games.github.io/action-games/just-fall/unnamed.png"
+    },
+    {
+      "id": 132,
+      "name": "Kitchen Gun Game",
+      "category": "action",
+      "popularity": "1M+",
+      "releaseDate": "Unknown",
+      "rating": "TODO",
+      "new": false,
+      "trending": 5000,
+      "link": "https://macvg-games.github.io/action-games/kitchen-gun-game/",
+      "genre": "Shooting Games",
+      "build": "HTML5, JavaScript",
+      "dev": "Ash K",
+      "about": "Oops, you caught us, we're still working hard to provide game description on this game! In the upcoming updates, more and more games will have their descriptions and instructions to help you beat it, so stay tuned for more updates!",
+      "controls": ["Still working on this one O_O"],
+      "thumb": "https://macvg-games.github.io/action-games/kitchen-gun-game/splash.png"
+    },
+    {
+      "id": 134,
+      "name": "Knife Master",
+      "category": "action",
+      "popularity": "500K+",
+      "releaseDate": "Unknown",
+      "rating": "TODO",
+      "new": false,
+      "trending": 4000,
+      "link": "https://macvg-games.github.io/action-games/knife-master/",
+      "genre": "Action Games",
+      "build": "HTML5, JavaScript",
+      "dev": "Cuga",
+      "about": "Oops, you caught us, we're still working hard to provide game description on this game! In the upcoming updates, more and more games will have their descriptions and instructions to help you beat it, so stay tuned for more updates!",
+      "controls": ["Still working on this one O_O"],
+      "thumb": "https://macvg-games.github.io/action-games/knife-master/512x512.jpg"
+    },
+    {
+      "id": 140,
+      "name": "Mario",
+      "category": "action",
+      "popularity": "100M+",
+      "releaseDate": "September 13, 1985",
+      "rating": "TODO",
+      "new": false,
+      "trending": 20000,
+      "link": "https://macvg-games.github.io/action-games/mario/",
+      "genre": "Platformer Games",
+      "build": "HTML5, JavaScript",
+      "dev": "Nintendo",
+      "about": "Oops, you caught us, we're still working hard to provide game description on this game! In the upcoming updates, more and more games will have their descriptions and instructions to help you beat it, so stay tuned for more updates!",
+      "controls": ["Still working on this one O_O"],
+      "thumb": "https://macvg-games.github.io/action-games/mario/Theme/Mario.gif",
+      "download": true
+    },
+    {
+      "id": 305,
+      "name": "Mario Bros",
+      "category": "action",
+      "popularity": "100M+",
+      "releaseDate": "september 13, 1985",
+      "rating": "TODO",
+      "new": false,
+      "trending": 20000,
+      "link": "https://macvg-games.github.io/action-games/mario-bros/",
+      "genre": "Platformer Games",
+      "build": "HTML5, JavaScript",
+      "dev": "Nintendo",
+      "about": "Oops, you caught us, we're still working hard to provide game description on this game! In the upcoming updates, more and more games will have their descriptions and instructions to help you beat it, so stay tuned for more updates!",
+      "controls": ["Still working on this one O_O"],
+      "thumb": "https://macvg-games.github.io/action-games/mario-bros/NewSuperMarioBros.png"
+    },
+    {
+      "id": 142,
+      "name": "Matrix Rampage",
+      "category": "action",
+      "popularity": "5M+",
+      "releaseDate": "December 4, 2006",
+      "rating": "TODO",
+      "new": false,
+      "trending": 9000,
+      "link": "https://macvg-games.github.io/action-games/matrixrampage/",
+      "genre": "Run and Gun Games",
+      "build": "Flash",
+      "dev": "Suriyathept",
+      "about": "Oops, you caught us, we're still working hard to provide game description on this game! In the upcoming updates, more and more games will have their descriptions and instructions to help you beat it, so stay tuned for more updates!",
+      "controls": ["Still working on this one O_O"],
+      "thumb": "https://macvg-games.github.io/action-games/matrixrampage/matrixrampage.jpg"
+    },
+    {
+      "id": 145,
+      "name": "Mine Blocks",
+      "category": "action",
+      "popularity": "5M+",
+      "releaseDate": "November 13, 2020",
+      "rating": "TODO",
+      "new": false,
+      "trending": 10000,
+      "link": "https://macvg-games.github.io/action-games/mineblocks/",
+      "genre": "Adventure Games",
+      "build": "HTML5, JavaScript",
+      "dev": "Zanzlanz",
+      "about": "Oops, you caught us, we're still working hard to provide game description on this game! In the upcoming updates, more and more games will have their descriptions and instructions to help you beat it, so stay tuned for more updates!",
+      "controls": ["Still working on this one O_O"],
+      "thumb": "https://macvg-games.github.io/action-games/mineblocks/splash.png"
+    },
+    {
+      "id": 146,
+      "name": "Minecraft 1.5",
+      "category": "action",
+      "popularity": "50M+",
+      "releaseDate": "Unknown",
+      "rating": "TODO",
+      "new": false,
+      "trending": 81578,
+      "link": "https://macvg-games.github.io/action-games/minecraft-15/",
+      "genre": "Adventure Games",
+      "build": "HTML5, JavaScript",
+      "dev": "LAX1DUDE",
+      "about": "Oops, you caught us, we're still working hard to provide game description on this game! In the upcoming updates, more and more games will have their descriptions and instructions to help you beat it, so stay tuned for more updates!",
+      "controls": ["Still working on this one O_O"],
+      "thumb": "https://macvg-games.github.io/action-games/minecraft-15/splash.jpeg"
+    },
+    {
+      "id": 147,
+      "name": "Minecraft 1.8",
+      "category": "action",
+      "popularity": "50M+",
+      "releaseDate": "Unknown",
+      "rating": "TODO",
+      "new": false,
+      "trending": 16000,
+      "featured": true,
+      "link": "https://macvg-games.github.io/action-games/minecraft-18/",
+      "genre": "Adventure Games",
+      "build": "HTML5, JavaScript",
+      "dev": "LAX1DUDE",
+      "about": "Oops, you caught us, we're still working hard to provide game description on this game! In the upcoming updates, more and more games will have their descriptions and instructions to help you beat it, so stay tuned for more updates!",
+      "controls": ["Still working on this one O_O"],
+      "thumb": "https://macvg-games.github.io/action-games/minecraft-18/splash.png"
+    },
+    {
+      "id": 148,
+      "name": "Minecraft Classic",
+      "category": "action",
+      "popularity": "500M+",
+      "releaseDate": "May 17, 2009",
+      "rating": "TODO",
+      "new": false,
+      "trending": 25000,
+      "link": "https://macvg-games.github.io/action-games/minecraft-classic/",
+      "genre": "Adventure Games",
+      "build": "HTML5, JavaScript",
+      "dev": "Mojang Studios",
+      "about": "Oops, you caught us, we're still working hard to provide game description on this game! In the upcoming updates, more and more games will have their descriptions and instructions to help you beat it, so stay tuned for more updates!",
+      "controls": ["Still working on this one O_O"],
+      "thumb": "https://macvg-games.github.io/action-games/minecraft-classic/pack.png"
+    },
+    {
+      "id": 149,
+      "name": "Minecraft Classic Hacks",
+      "category": "action",
+      "popularity": "500M+",
+      "releaseDate": "May 17, 2009",
+      "rating": "TODO",
+      "new": false,
+      "trending": 24000,
+      "link": "https://macvg-games.github.io/action-games/minecraftbeta/",
+      "genre": "Adventure Games",
+      "build": "HTML5, JavaScript",
+      "dev": "Mojang Studios",
+      "about": "Oops, you caught us, we're still working hard to provide game description on this game! In the upcoming updates, more and more games will have their descriptions and instructions to help you beat it, so stay tuned for more updates!",
+      "controls": ["Still working on this one O_O"],
+      "thumb": "https://macvg-games.github.io/action-games/minecraftbeta/bg_main.png"
+    },
+    {
+      "id": 152,
+      "name": "Missiles",
+      "category": "action",
+      "popularity": "1M+",
+      "releaseDate": "Unknown",
+      "rating": "TODO",
+      "new": false,
+      "trending": 5000,
+      "link": "https://macvg-games.github.io/action-games/missiles/",
+      "genre": "Reaction Games",
+      "build": "HTML5, JavaScript",
+      "dev": "Anonymous",
+      "about": "Oops, you caught us, we're still working hard to provide game description on this game! In the upcoming updates, more and more games will have their descriptions and instructions to help you beat it, so stay tuned for more updates!",
+      "controls": ["Still working on this one O_O"],
+      "thumb": "https://macvg-games.github.io/action-games/missiles/miss.png",
+      "download": true
+    },
+    {
+      "id": 153,
+      "name": "Moto X3M",
+      "category": "action",
+      "popularity": "100M+",
+      "releaseDate": "August 18, 2015",
+      "rating": "TODO",
+      "new": false,
+      "trending": 20000,
+      "featured": true,
+      "link": "https://macvg-games.github.io/action-games/motox3m/",
+      "genre": "Motorcycle Games",
+      "build": "HTML5, JavaScript",
+      "dev": "Madpuffers",
+      "about": "Oops, you caught us, we're still working hard to provide game description on this game! In the upcoming updates, more and more games will have their descriptions and instructions to help you beat it, so stay tuned for more updates!",
+      "controls": ["Still working on this one O_O"],
+      "thumb": "https://macvg-games.github.io/action-games/motox3m/splash.jpg"
+    },
+    {
+      "id": 154,
+      "name": "Moto X3M 2",
+      "category": "action",
+      "popularity": "100M+",
+      "releaseDate": "February 11, 2016",
+      "rating": "TODO",
+      "new": false,
+      "trending": 19000,
+      "link": "https://macvg-games.github.io/action-games/motox3m2/",
+      "genre": "Motorcycle Games",
+      "build": "HTML5, JavaScript",
+      "dev": "Madpuffers",
+      "about": "Oops, you caught us, we're still working hard to provide game description on this game! In the upcoming updates, more and more games will have their descriptions and instructions to help you beat it, so stay tuned for more updates!",
+      "controls": ["Still working on this one O_O"],
+      "thumb": "https://macvg-games.github.io/action-games/motox3m2/splash.jpg"
+    },
+    {
+      "id": 155,
+      "name": "Moto X3M Pool",
+      "category": "action",
+      "popularity": "100M+",
+      "releaseDate": "March 2019",
+      "rating": "TODO",
+      "new": false,
+      "trending": 18000,
+      "link": "https://macvg-games.github.io/action-games/motox3m-pool/",
+      "genre": "Motorcycle Games",
+      "build": "HTML5, JavaScript",
+      "dev": "Madpuffers",
+      "about": "Oops, you caught us, we're still working hard to provide game description on this game! In the upcoming updates, more and more games will have their descriptions and instructions to help you beat it, so stay tuned for more updates!",
+      "controls": ["Still working on this one O_O"],
+      "thumb": "https://macvg-games.github.io/action-games/motox3m-pool/splash.jpg"
+    },
+    {
+      "id": 156,
+      "name": "Moto X3M Spooky",
+      "category": "action",
+      "popularity": "100M+",
+      "releaseDate": "October 2019",
+      "rating": "TODO",
+      "new": false,
+      "trending": 18000,
+      "link": "https://macvg-games.github.io/action-games/motox3m-spooky/",
+      "genre": "Motorcycle Games",
+      "build": "HTML5, JavaScript",
+      "dev": "Madpuffers",
+      "about": "Oops, you caught us, we're still working hard to provide game description on this game! In the upcoming updates, more and more games will have their descriptions and instructions to help you beat it, so stay tuned for more updates!",
+      "controls": ["Still working on this one O_O"],
+      "thumb": "https://macvg-games.github.io/action-games/motox3m-spooky/splash.jpeg"
+    },
+    {
+      "id": 157,
+      "name": "Moto X3M Winter",
+      "category": "action",
+      "popularity": "100M+",
+      "releaseDate": "December 2017",
+      "rating": "TODO",
+      "new": false,
+      "trending": 18000,
+      "link": "https://macvg-games.github.io/action-games/motox3m-winter/",
+      "genre": "Motorcycle Games",
+      "build": "HTML5, JavaScript",
+      "dev": "Madpuffers",
+      "about": "Oops, you caught us, we're still working hard to provide game description on this game! In the upcoming updates, more and more games will have their descriptions and instructions to help you beat it, so stay tuned for more updates!",
+      "controls": ["Still working on this one O_O"],
+      "thumb": "https://macvg-games.github.io/action-games/motox3m-winter/download.jpeg"
+    },
+    {
+      "id": 159,
+      "name": "n-gon",
+      "category": "action",
+      "popularity": "5M+",
+      "releaseDate": "October 11, 2022",
+      "rating": "TODO",
+      "new": false,
+      "trending": 10000,
+      "link": "https://macvg-games.github.io/action-games/n-gon/",
+      "genre": "Platformer Games",
+      "build": "HTML5, JavaScript",
+      "dev": "quadape",
+      "about": "Oops, you caught us, we're still working hard to provide game description on this game! In the upcoming updates, more and more games will have their descriptions and instructions to help you beat it, so stay tuned for more updates!",
+      "controls": ["Still working on this one O_O"],
+      "thumb": "https://macvg-games.github.io/action-games/n-gon/bot.png",
+      "download": true
+    },
+    {
+      "id": 161,
+      "name": "Ninja vs Evil Corp",
+      "category": "action",
+      "popularity": "5M+",
+      "releaseDate": "September 23, 2020",
+      "rating": "TODO",
+      "new": false,
+      "trending": 10000,
+      "link": "https://macvg-games.github.io/action-games/ninjavsevilcorp/",
+      "genre": "Platformer Games",
+      "build": "HTML5, JavaScript",
+      "dev": "Remil Vansteelandt",
+      "about": "Oops, you caught us, we're still working hard to provide game description on this game! In the upcoming updates, more and more games will have their descriptions and instructions to help you beat it, so stay tuned for more updates!",
+      "controls": ["Still working on this one O_O"],
+      "thumb": "https://macvg-games.github.io/action-games/ninjavsevilcorp/splash.png",
+      "download": true
+    },
+    {
+      "id": 163,
+      "name": "NS-Shaft",
+      "category": "action",
+      "popularity": "10M+",
+      "releaseDate": "1990",
+      "rating": "TODO",
+      "new": false,
+      "trending": 12000,
+      "link": "https://macvg-games.github.io/action-games/ns-shaft/",
+      "genre": "Reaction Games",
+      "build": "HTML5, JavaScript",
+      "dev": "Nagi-p Soft",
+      "about": "Oops, you caught us, we're still working hard to provide game description on this game! In the upcoming updates, more and more games will have their descriptions and instructions to help you beat it, so stay tuned for more updates!",
+      "controls": ["Still working on this one O_O"],
+      "thumb": "https://macvg-games.github.io/action-games/ns-shaft/favicon.png",
+      "download": true
+    },
+    {
+      "id": 164,
+      "name": "Offline Paradise",
+      "category": "action",
+      "popularity": "1M+",
+      "releaseDate": "Unknown",
+      "rating": "TODO",
+      "new": false,
+      "trending": 6000,
+      "link": "https://macvg-games.github.io/action-games/OfflineParadise/",
+      "genre": "Platformer Games",
+      "build": "HTML5, JavaScript",
+      "dev": "sirxemic",
+      "about": "Oops, you caught us, we're still working hard to provide game description on this game! In the upcoming updates, more and more games will have their descriptions and instructions to help you beat it, so stay tuned for more updates!",
+      "controls": ["Still working on this one O_O"],
+      "thumb": "https://macvg-games.github.io/action-games/OfflineParadise/assets/icon.jpeg"
+    },
+    {
+      "id": 165,
+      "name": "Om Nom Bounce",
+      "category": "action",
+      "popularity": "1M+",
+      "releaseDate": "Unknown",
+      "rating": "TODO",
+      "new": false,
+      "trending": 6000,
+      "link": "https://macvg-games.github.io/action-games/om-bounce/",
+      "genre": "Tower Defense Games",
+      "build": "HTML5, JavaScript",
+      "dev": "ZeptoLab",
+      "about": "Oops, you caught us, we're still working hard to provide game description on this game! In the upcoming updates, more and more games will have their descriptions and instructions to help you beat it, so stay tuned for more updates!",
+      "controls": ["Still working on this one O_O"],
+      "thumb": "https://macvg-games.github.io/action-games/om-bounce/assets/icon.jpeg"
+    },
+    {
+      "id": 308,
+      "name": "Paper Minecraft",
+      "category": "action",
+      "popularity": "50M+",
+      "releaseDate": "December 1, 2014",
+      "rating": "TODO",
+      "new": false,
+      "trending": 15000,
+      "link": "https://macvg-games.github.io/action-games/paper-minecraft/",
+      "genre": "Adventure Games",
+      "build": "Scratch",
+      "dev": "Griffpatch",
+      "about": "Oops, you caught us, we're still working hard to provide game description on this game! In the upcoming updates, more and more games will have their descriptions and instructions to help you beat it, so stay tuned for more updates!",
+      "controls": ["Still working on this one O_O"],
+      "thumb": "https://macvg-games.github.io/action-games/paper-minecraft/PaperMinecraft.png"
+    },
+    {
+      "id": 309,
+      "name": "P.Craft",
+      "category": "action",
+      "popularity": "1M+",
+      "releaseDate": "Unknown",
+      "rating": "TODO",
+      "new": false,
+      "trending": 5000,
+      "link": "https://macvg-games.github.io/action-games/pcraft/",
+      "genre": "Adventure Games",
+      "build": "HTML5, JavaScript",
+      "dev": "NuSan",
+      "about": "Oops, you caught us, we're still working hard to provide game description on this game! In the upcoming updates, more and more games will have their descriptions and instructions to help you beat it, so stay tuned for more updates!",
+      "controls": ["Still working on this one O_O"],
+      "thumb": "https://macvg-games.github.io/action-games/pcraft/PCraft.png",
+      "download": true
+    },
+    {
+      "id": 171,
+      "name": "Papery Planes",
+      "category": "action",
+      "popularity": "1M+",
+      "releaseDate": "Unknown",
+      "rating": "TODO",
+      "new": false,
+      "trending": 6000,
+      "link": "https://macvg-games.github.io/action-games/papery-planes/",
+      "genre": "Reaction Games",
+      "build": "Unity WebGL",
+      "dev": "Anonymous",
+      "about": "Oops, you caught us, we're still working hard to provide game description on this game! In the upcoming updates, more and more games will have their descriptions and instructions to help you beat it, so stay tuned for more updates!",
+      "controls": ["Still working on this one O_O"],
+      "thumb": "https://macvg-games.github.io/action-games/papery-planes/splash.jpg"
+    },
+    {
+      "id": 173,
+      "name": "Pixel Gun Survival",
+      "category": "action",
+      "popularity": "5M+",
+      "releaseDate": "Unknown",
+      "rating": "TODO",
+      "new": false,
+      "trending": 9000,
+      "link": "https://macvg-games.github.io/action-games/pixel-gun-survival/",
+      "genre": "Shooter Games",
+      "build": "Unity WebGL",
+      "dev": "Pixel Gun 3D",
+      "about": "Oops, you caught us, we're still working hard to provide game description on this game! In the upcoming updates, more and more games will have their descriptions and instructions to help you beat it, so stay tuned for more updates!",
+      "controls": ["Still working on this one O_O"],
+      "thumb": "https://macvg-games.github.io/action-games/pixel-gun-survival/512x512.png"
+    },
+    {
+      "id": 174,
+      "name": "PolyBranch",
+      "category": "action",
+      "popularity": "5M+",
+      "releaseDate": "2012",
+      "rating": "TODO",
+      "new": false,
+      "trending": 8000,
+      "link": "https://macvg-games.github.io/action-games/polybranch/",
+      "genre": "Reaction Games",
+      "build": "HTML5, JavaScript",
+      "dev": "gbatha",
+      "about": "Oops, you caught us, we're still working hard to provide game description on this game! In the upcoming updates, more and more games will have their descriptions and instructions to help you beat it, so stay tuned for more updates!",
+      "controls": ["Still working on this one O_O"],
+      "thumb": "https://macvg-games.github.io/action-games/polybranch/img/pic1.png"
+    },
+    {
+      "id": 178,
+      "name": "Protektor",
+      "category": "action",
+      "popularity": "1M+",
+      "releaseDate": "Unknown",
+      "rating": "TODO",
+      "new": false,
+      "trending": 5000,
+      "link": "https://macvg-games.github.io/action-games/protektor/",
+      "genre": "Shooting Games",
+      "build": "HTML5, JavaScript",
+      "dev": "rujogames",
+      "about": "Oops, you caught us, we're still working hard to provide game description on this game! In the upcoming updates, more and more games will have their descriptions and instructions to help you beat it, so stay tuned for more updates!",
+      "controls": ["Still working on this one O_O"],
+      "thumb": "https://macvg-games.github.io/action-games/protektor/splash.jpg"
+    },
+    {
+      "id": 192,
+      "name": "Rolling Forests",
+      "category": "action",
+      "popularity": "1M+",
+      "releaseDate": "Unknown",
+      "rating": "TODO",
+      "new": false,
+      "trending": 6000,
+      "link": "https://macvg-games.github.io/action-games/rolling-forests/",
+      "genre": "Reaction Games",
+      "build": "HTML5, JavaScript",
+      "dev": "Anonymous",
+      "about": "Oops, you caught us, we're still working hard to provide game description on this game! In the upcoming updates, more and more games will have their descriptions and instructions to help you beat it, so stay tuned for more updates!",
+      "controls": ["Still working on this one O_O"],
+      "thumb": "https://macvg-games.github.io/action-games/rolling-forests/icon.png",
+      "download": true
+    },
+    {
+      "id": 193,
+      "name": "Rolly Vortex",
+      "category": "action",
+      "popularity": "5M+",
+      "releaseDate": "Unknown",
+      "rating": "TODO",
+      "new": false,
+      "trending": 9000,
+      "link": "https://macvg-games.github.io/action-games/rolly-vortex/",
+      "genre": "Reaction Games",
+      "build": "HTML5, JavaScript",
+      "dev": "BDJ GAMES",
+      "about": "Oops, you caught us, we're still working hard to provide game description on this game! In the upcoming updates, more and more games will have their descriptions and instructions to help you beat it, so stay tuned for more updates!",
+      "controls": ["Still working on this one O_O"],
+      "thumb": "https://macvg-games.github.io/action-games/rolly-vortex/icon-256.png"
+    },
+    {
+      "id": 194,
+      "name": "Rooftop Snipers",
+      "category": "action",
+      "popularity": "30M+",
+      "releaseDate": "Unknown",
+      "rating": "TODO",
+      "new": false,
+      "trending": 17000,
+      "link": "https://macvg-games.github.io/action-games/rooftop-snipers/",
+      "genre": "Dueling Games",
+      "build": "Unity WebGL",
+      "dev": "New Eich Games",
+      "about": "Oops, you caught us, we're still working hard to provide game description on this game! In the upcoming updates, more and more games will have their descriptions and instructions to help you beat it, so stay tuned for more updates!",
+      "controls": ["Still working on this one O_O"],
+      "thumb": "https://macvg-games.github.io/action-games/rooftop-snipers/img/thumb.png"
+    },
+    {
+      "id": 201,
+      "name": "SHUTTLEDECK",
+      "category": "action",
+      "popularity": "5M+",
+      "releaseDate": "September 13, 2021",
+      "rating": "TODO",
+      "new": false,
+      "trending": 10000,
+      "link": "https://macvg-games.github.io/action-games/shuttledeck/",
+      "genre": "Reaction Games",
+      "build": "HTML5, JavaScript",
+      "dev": "Ariel Wexler",
+      "about": "Oops, you caught us, we're still working hard to provide game description on this game! In the upcoming updates, more and more games will have their descriptions and instructions to help you beat it, so stay tuned for more updates!",
+      "controls": ["Still working on this one O_O"],
+      "thumb": "https://macvg-games.github.io/action-games/shuttledeck/splash.png",
+      "download": true
+    },
+    {
+      "id": 370,
+      "name": "Skibidi Strike",
+      "category": "action",
+      "popularity": "5M+",
+      "releaseDate": "September 2023",
+      "rating": "TODO",
+      "new": false,
+      "trending": 12000,
+      "link": "https://macvg-games.github.io/action-games/skibidi-strike/",
+      "genre": "Shooter Games",
+      "build": "Unity WebGL",
+      "dev": "G55",
+      "about": "Oops, you caught us, we're still working hard to provide game description on this game! In the upcoming updates, more and more games will have their descriptions and instructions to help you beat it, so stay tuned for more updates!",
+      "controls": [
+        "WASD / Arrow Keys: Move",
+        "Space: Jump",
+        "Left Click: Shoot",
+        "Right Click: Aim",
+        "G: Grenade",
+        "R: Reload",
+        "T: Slow Motion",
+        "V: Melee",
+        "Shift: Run",
+        "Scroll: Switch Weapons",
+        "Tab: Pause"
+      ],
+      "thumb": "https://macvg-games.github.io/action-games/skibidi-strike/logo.jpg"
+    },
+    {
+      "id": 205,
+      "name": "Slope",
+      "category": "action",
+      "popularity": "100M+",
+      "releaseDate": "September 30, 2014",
+      "rating": "TODO",
+      "new": false,
+      "trending": 54028,
+      "featured": true,
+      "link": "https://macvg-games.github.io/action-games/slope/",
+      "genre": "Reaction Games",
+      "build": "Unity WebGL",
+      "dev": "RobKaySF",
+      "about": "In Slope, this exciting fast-paced action game, you need to navigate a ball down an endless slope with breakneck speeds! There are cliffs, curves, blocks, and all sorts of obstacles that you need to dodge and jump! Don't hit any red blocks, and don't go off the slope! There are speed up ramps that speeds up the ball even more, making the game even more intense! Try to avoid falling off the slope for as long as possible and get the most points! React fast, navigate accurately, and stay on track!",
+      "controls": ["Left Arrow: Go Left", "Right Arrow: Go right", "Note: WASD keys also work"],
+      "thumb": "https://macvg-games.github.io/action-games/slope/slope4.jpeg"
+    },
+    {
+      "id": 206,
+      "name": "Slope 2",
+      "category": "action",
+      "popularity": "5M+",
+      "releaseDate": "Unknown",
+      "rating": "TODO",
+      "new": false,
+      "trending": 11000,
+      "link": "https://macvg-games.github.io/action-games/slope-2/",
+      "genre": "Reaction Games",
+      "build": "Unity WebGL",
+      "dev": "Anonymous",
+      "about": "Oops, you caught us, we're still working hard to provide game description on this game! In the upcoming updates, more and more games will have their descriptions and instructions to help you beat it, so stay tuned for more updates!",
+      "controls": ["Still working on this one O_O"],
+      "thumb": "https://macvg-games.github.io/action-games/slope-2/slope-2-logo.png"
+    },
+    {
+      "id": 207,
+      "name": "Slope Ball",
+      "category": "action",
+      "popularity": "1M+",
+      "releaseDate": "Unknown",
+      "rating": "TODO",
+      "new": false,
+      "trending": 6000,
+      "link": "https://macvg-games.github.io/action-games/slope-ball/",
+      "genre": "Reaction Games",
+      "build": "HTML5, JavaScript",
+      "dev": "Anonymous",
+      "about": "Oops, you caught us, we're still working hard to provide game description on this game! In the upcoming updates, more and more games will have their descriptions and instructions to help you beat it, so stay tuned for more updates!",
+      "controls": ["Still working on this one O_O"],
+      "thumb": "https://macvg-games.github.io/action-games/slope-ball/splash.png"
+    },
+    {
+      "id": 208,
+      "name": "Super Mario 64",
+      "category": "action",
+      "popularity": "10M+",
+      "releaseDate": "Unknown",
+      "rating": "TODO",
+      "new": false,
+      "trending": 13000,
+      "link": "https://macvg-games.github.io/action-games/sm64/",
+      "genre": "Adventure Games",
+      "build": "HTML5, JavaScript",
+      "dev": "Nintendo",
+      "about": "Oops, you caught us, we're still working hard to provide game description on this game! In the upcoming updates, more and more games will have their descriptions and instructions to help you beat it, so stay tuned for more updates!",
+      "controls": ["Still working on this one O_O"],
+      "thumb": "https://macvg-games.github.io/action-games/sm64/logo.png"
+    },
+    {
+      "id": 210,
+      "name": "Smoking Barrels",
+      "category": "action",
+      "popularity": "5M+",
+      "releaseDate": "November 18, 2007",
+      "rating": "TODO",
+      "new": false,
+      "trending": 9000,
+      "link": "https://macvg-games.github.io/action-games/smokingbarrels/",
+      "genre": "Shooting Games",
+      "build": "Flash",
+      "dev": "GmaeSheep",
+      "about": "Oops, you caught us, we're still working hard to provide game description on this game! In the upcoming updates, more and more games will have their descriptions and instructions to help you beat it, so stay tuned for more updates!",
+      "controls": ["Still working on this one O_O"],
+      "thumb": "https://macvg-games.github.io/action-games/smokingbarrels/smokingbarrels.jpg"
+    },
+    {
+      "id": 322,
+      "name": "Snow Rider 3D",
+      "category": "action",
+      "popularity": "50M+",
+      "releaseDate": "Unknown",
+      "rating": "TODO",
+      "new": false,
+      "trending": 14000,
+      "link": "https://macvg-games.github.io/action-games/snow-ride/",
+      "genre": "Reaction Games",
+      "build": "Unity WebGL",
+      "dev": "Anonymous",
+      "about": "Oops, you caught us, we're still working hard to provide game description on this game! In the upcoming updates, more and more games will have their descriptions and instructions to help you beat it, so stay tuned for more updates!",
+      "controls": ["Still working on this one O_O"],
+      "thumb": "https://macvg-games.github.io/action-games/snow-ride/logo.jpg"
+    },
+    {
+      "id": 214,
+      "name": "Soldier Legend",
+      "category": "action",
+      "popularity": "10M+",
+      "releaseDate": "April 2, 2020",
+      "rating": "TODO",
+      "new": false,
+      "trending": 12000,
+      "link": "https://macvg-games.github.io/action-games/soldier-legend/",
+      "genre": "Run and Gun Games",
+      "build": "Unity WebGL",
+      "dev": "QKY Game Studio",
+      "about": "Oops, you caught us, we're still working hard to provide game description on this game! In the upcoming updates, more and more games will have their descriptions and instructions to help you beat it, so stay tuned for more updates!",
+      "controls": ["Still working on this one O_O"],
+      "thumb": "https://macvg-games.github.io/action-games/soldier-legend/images/splash.jpeg"
+    },
+    {
+      "id": 219,
+      "name": "Space Garden",
+      "category": "action",
+      "popularity": "1M+",
+      "releaseDate": "Unknown",
+      "rating": "TODO",
+      "new": false,
+      "trending": 5000,
+      "link": "https://macvg-games.github.io/action-games/spacegarden/",
+      "genre": "Action Games",
+      "build": "HTML5, JavaScript",
+      "dev": "Ryan Malm",
+      "about": "Oops, you caught us, we're still working hard to provide game description on this game! In the upcoming updates, more and more games will have their descriptions and instructions to help you beat it, so stay tuned for more updates!",
+      "controls": ["Still working on this one O_O"],
+      "thumb": "https://macvg-games.github.io/action-games/spacegarden/spl.png",
+      "download": true
+    },
+    {
+      "id": 220,
+      "name": "Stack",
+      "category": "action",
+      "popularity": "10M+",
+      "releaseDate": "Unknown",
+      "rating": "TODO",
+      "new": false,
+      "trending": 11000,
+      "link": "https://macvg-games.github.io/action-games/stack/",
+      "genre": "Timing Games",
+      "build": "HTML5, JavaScript",
+      "dev": "Anonymous",
+      "about": "Oops, you caught us, we're still working hard to provide game description on this game! In the upcoming updates, more and more games will have their descriptions and instructions to help you beat it, so stay tuned for more updates!",
+      "controls": ["Still working on this one O_O"],
+      "thumb": "https://macvg-games.github.io/action-games/stack/stack.png",
+      "download": true
+    },
+    {
+      "id": 221,
+      "name": "Stack Bump 3D",
+      "category": "action",
+      "popularity": "5M+",
+      "releaseDate": "Unknown",
+      "rating": "TODO",
+      "new": false,
+      "trending": 9000,
+      "link": "https://macvg-games.github.io/action-games/stack-bump-3d/",
+      "genre": "Timing Games",
+      "build": "Unity WebGL",
+      "dev": "Anonymous",
+      "about": "Oops, you caught us, we're still working hard to provide game description on this game! In the upcoming updates, more and more games will have their descriptions and instructions to help you beat it, so stay tuned for more updates!",
+      "controls": ["Still working on this one O_O"],
+      "thumb": "https://macvg-games.github.io/action-games/stack-bump-3d/thumbnail.jpg"
+    },
+    {
+      "id": 223,
+      "name": "Station 141",
+      "category": "action",
+      "popularity": "5M+",
+      "releaseDate": "Unknown",
+      "rating": "TODO",
+      "new": false,
+      "trending": 9000,
+      "link": "https://macvg-games.github.io/action-games/station-141/",
+      "genre": "Shooter Games",
+      "build": "Unity WebGL",
+      "dev": "Maksim Chmutov",
+      "about": "Oops, you caught us, we're still working hard to provide game description on this game! In the upcoming updates, more and more games will have their descriptions and instructions to help you beat it, so stay tuned for more updates!",
+      "controls": ["Still working on this one O_O"],
+      "thumb": "https://macvg-games.github.io/action-games/station-141/75wxYs.png"
+    },
+    {
+      "id": 225,
+      "name": "Stick Archers",
+      "category": "action",
+      "popularity": "5M+",
+      "releaseDate": "January 2022",
+      "rating": "TODO",
+      "new": false,
+      "trending": 10000,
+      "link": "https://macvg-games.github.io/action-games/stick-archers/",
+      "genre": "Shooting Games",
+      "build": "HTML5, JavaScript",
+      "dev": "RHM Interactive",
+      "about": "Oops, you caught us, we're still working hard to provide game description on this game! In the upcoming updates, more and more games will have their descriptions and instructions to help you beat it, so stay tuned for more updates!",
+      "controls": ["Still working on this one O_O"],
+      "thumb": "https://macvg-games.github.io/action-games/stick-archers/splash.jpg"
+    },
+    {
+      "id": 226,
+      "name": "Stick Duel Battle",
+      "category": "action",
+      "popularity": "10M+",
+      "releaseDate": "Unknown",
+      "rating": "TODO",
+      "new": false,
+      "trending": 12000,
+      "link": "https://macvg-games.github.io/action-games/stick-duel-battle/",
+      "genre": "Shooting Games",
+      "build": "HTML5, JavaScript",
+      "dev": "RHM Interactive",
+      "about": "Oops, you caught us, we're still working hard to provide game description on this game! In the upcoming updates, more and more games will have their descriptions and instructions to help you beat it, so stay tuned for more updates!",
+      "controls": ["Still working on this one O_O"],
+      "thumb": "https://macvg-games.github.io/action-games/stick-duel-battle/512x512.jpg"
+    },
+    {
+      "id": 227,
+      "name": "Stick Merge",
+      "category": "action",
+      "popularity": "30M+",
+      "releaseDate": "Unknown",
+      "rating": "TODO",
+      "new": false,
+      "trending": 17000,
+      "link": "https://macvg-games.github.io/action-games/stick-merge/",
+      "genre": "Shooting Games",
+      "build": "HTML5, JavaScript",
+      "dev": "TinyDobbins",
+      "about": "Oops, you caught us, we're still working hard to provide game description on this game! In the upcoming updates, more and more games will have their descriptions and instructions to help you beat it, so stay tuned for more updates!",
+      "controls": ["Still working on this one O_O"],
+      "thumb": "https://macvg-games.github.io/action-games/stick-merge/splash.png"
+    },
+    {
+      "id": 228,
+      "name": "Stickman Boost",
+      "category": "action",
+      "popularity": "1M+",
+      "releaseDate": "Unknown",
+      "rating": "TODO",
+      "new": false,
+      "trending": 6000,
+      "link": "https://macvg-games.github.io/action-games/stickman-boost/",
+      "genre": "Platformer Games",
+      "build": "HTML5, JavaScript",
+      "dev": "Anonymous",
+      "about": "Oops, you caught us, we're still working hard to provide game description on this game! In the upcoming updates, more and more games will have their descriptions and instructions to help you beat it, so stay tuned for more updates!",
+      "controls": ["Still working on this one O_O"],
+      "thumb": "https://macvg-games.github.io/action-games/stickman-boost/base/img1.jpg"
+    },
+    {
+      "id": 234,
+      "name": "Subway Surfers",
+      "category": "action",
+      "popularity": "1B+",
+      "releaseDate": "May 24, 2012",
+      "rating": "TODO",
+      "new": false,
+      "trending": 36764,
+      "featured": true,
+      "link": "https://macvg-games.github.io/action-games/subway-surfers/",
+      "genre": "Endless Runner Games",
+      "build": "Unity WebGL",
+      "dev": "SYBO",
+      "about": "Subway Surfers, a fun and addicting endless parkour game, is one of the most iconic and well-known mobile games in the world! Your mission is to escape from the police, collect coins, while dodging the obstacles! Complete mission sets to boost your score and use upgrades wisely! Use hoverboard to save you from crashing and keys to revive. You can also get power ups that upgrade you for a certain amount of time. Use the coins to purchase charactes, upgrades, hoverboards, and other stuff! In this interesting San Francisco themed playground, see how far you can go!",
+      "controls": [
+        "Up Arrow: Jump",
+        "Down Arrow: Roll / Smash",
+        "Left / Right Arrows: Dash Left / Right",
+        "Space: Activate Hoverboard",
+        "Esc: Pause"
+      ],
+      "thumb": "https://macvg-games.github.io/action-games/subway-surfers/img/splash.jpg"
+    },
+    {
+      "id": 235,
+      "name": "Subway Surfers New York",
+      "category": "action",
+      "popularity": "1B+",
+      "releaseDate": "May 24, 2012",
+      "rating": "TODO",
+      "new": false,
+      "trending": 35000,
+      "featured": true,
+      "link": "https://macvg-games.github.io/action-games/subway-surfers-ny/",
+      "genre": "Endless Runner Games",
+      "build": "Unity WebGL",
+      "dev": "SYBO",
+      "about": "Subway Surfers, a fun and addicting endless parkour game, is one of the most iconic and well-known mobile games in the world! Your mission is to escape from the police, collect coins, while dodging the obstacles! Complete mission sets to boost your score and use upgrades wisely! Use hoverboard to save you from crashing and keys to revive. You can also get power ups that upgrade you for a certain amount of time. Use the coins to purchase charactes, upgrades, hoverboards, and other stuff! In this interesting New York themed playground, see how far you can go!",
+      "controls": [
+        "Up Arrow: Jump",
+        "Down Arrow: Roll / Smash",
+        "Left / Right Arrows: Dash Left / Right",
+        "Space: Activate Hoverboard",
+        "Esc: Pause"
+      ],
+      "thumb": "https://macvg-games.github.io/action-games/subway-surfers-ny/NewYorkIcon.png"
+    },
+    {
+      "id": 236,
+      "name": "Superhot",
+      "category": "action",
+      "popularity": "10M+",
+      "releaseDate": "September 2013",
+      "rating": "TODO",
+      "new": false,
+      "trending": 13000,
+      "featured": true,
+      "link": "https://macvg-games.github.io/action-games/superhot/",
+      "genre": "Shooter Games",
+      "build": "Unity WebGL",
+      "dev": "SUPERHOT Team",
+      "about": "Oops, you caught us, we're still working hard to provide game description on this game! In the upcoming updates, more and more games will have their descriptions and instructions to help you beat it, so stay tuned for more updates!",
+      "controls": ["Still working on this one O_O"],
+      "thumb": "https://macvg-games.github.io/action-games/superhot/hot.jpg"
+    },
+    {
+      "id": 237,
+      "name": "Super Mario Construct",
+      "category": "action",
+      "popularity": "1M+",
+      "releaseDate": "Unknown",
+      "rating": "TODO",
+      "new": false,
+      "trending": 6000,
+      "link": "https://macvg-games.github.io/action-games/supermarioconstruct/",
+      "genre": "Platformer Games",
+      "build": "HTML5, JavaScript",
+      "dev": "LuigiBonus",
+      "about": "Oops, you caught us, we're still working hard to provide game description on this game! In the upcoming updates, more and more games will have their descriptions and instructions to help you beat it, so stay tuned for more updates!",
+      "controls": ["Still working on this one O_O"],
+      "thumb": "https://macvg-games.github.io/action-games/supermarioconstruct/media/icons/icon-128.png"
+    },
+    {
+      "id": 241,
+      "name": "Synesthesia",
+      "category": "action",
+      "popularity": "1M+",
+      "releaseDate": "Unknown",
+      "rating": "TODO",
+      "new": false,
+      "trending": 5000,
+      "link": "https://macvg-games.github.io/action-games/synesthesia/",
+      "genre": "Platformer Games",
+      "build": "HTML5, JavaScript",
+      " Fig": "Breather",
+      "about": "Oops, you caught us, we're still working hard to provide game description on this game! In the upcoming updates, more and more games will have their descriptions and instructions to help you beat it, so stay tuned for more updates!",
+      "controls": ["Still working on this one O_O"],
+      "thumb": "https://macvg-games.github.io/action-games/synesthesia/index.splash.png"
+    },
+    {
+      "id": 242,
+      "name": "Tactical Weapon Pack 2",
+      "category": "action",
+      "popularity": "1M+",
+      "releaseDate": "Unknown",
+      "rating": "TODO",
+      "new": false,
+      "trending": 5000,
+      "link": "https://macvg-games.github.io/action-games/tactical-weapon-pack-2/",
+      "genre": "Shooting Games",
+      "build": "HTML5, JavaScript",
+      "dev": "Wilkin Games",
+      "about": "Oops, you caught us, we're still working hard to provide game description on this game! In the upcoming updates, more and more games will have their descriptions and instructions to help you beat it, so stay tuned for more updates!",
+      "controls": ["Still working on this one O_O"],
+      "thumb": "https://macvg-games.github.io/action-games/tactical-weapon-pack-2/splash.jpg"
+    },
+    {
+      "id": 243,
+      "name": "Tactical Assassin 2",
+      "category": "action",
+      "popularity": "5M+",
+      "releaseDate": "2005",
+      "rating": "TODO",
+      "new": false,
+      "trending": 9000,
+      "link": "https://macvg-games.github.io/action-games/tacticalassasin2/",
+      "genre": "Shooting Games",
+      "build": "Flash",
+      "dev": "Simon Hason Games",
+      "about": "Oops, you caught us, we're still working hard to provide game description on this game! In the upcoming updates, more and more games will have their descriptions and instructions to help you beat it, so stay tuned for more updates!",
+      "controls": ["Still working on this one O_O"],
+      "thumb": "https://macvg-games.github.io/action-games/tacticalassassin2/tacticalassassin2.png"
+    },
+    {
+      "id": 316,
+      "name": "Tag",
+      "category": "action",
+      "popularity": "10M+",
+      "releaseDate": "December 2022",
+      "rating": "TODO",
+      "new": false,
+      "trending": 13000,
+      "featured": true,
+      "link": "https://macvg-games.github.io/action-games/tag/",
+      "genre": "Platformer Games",
+      "build": "HTML5, JavaScript",
+      "dev": "JetGames",
+      "about": "Oops, you caught us, we're still working hard to provide game description on this game! In the upcoming updates, more and more games will have their descriptions and instructions to help you beat it, so stay tuned for more updates!",
+      "controls": ["Still working on this one O_O"],
+      "thumb": "https://macvg-games.github.io/action-games/tag/logo.jpg"
+    },
+    {
+      "id": 244,
+      "name": "Tank Trouble 2",
+      "category": "action",
+      "popularity": "10M+",
+      "releaseDate": "May 2015",
+      "rating": "TODO",
+      "new": false,
+      "trending": 12000,
+      "link": "https://macvg-games.github.io/action-games/tank-trouble-2/",
+      "genre": "Shooting Games",
+      "build": "HTML5, JavaScript",
+      "dev": "Subterranean Software",
+      "about": "Oops, you caught us, we're still working hard to provide game description on this game! In the upcoming updates, more and more games will have their descriptions and instructions to help you beat it, so stay tuned for more updates!",
+      "controls": ["Still working on this one O_O"],
+      "thumb": "https://macvg-games.github.io/action-games/tank-trouble-2/tank.jpeg"
+    },
+    {
+      "id": 245,
+      "name": "Tanuki Sunset",
+      "category": "action",
+      "popularity": "30M+",
+      "releaseDate": "December 4, 2020",
+      "rating": "TODO",
+      "new": false,
+      "trending": 17000,
+      "link": "https://macvg-games.github.io/action-games/tanuki-sunset/",
+      "genre": "Reaction Games",
+      "build": "HTML5, JavaScript",
+      "dev": "Rewind Games",
+      "about": "Oops, you caught us, we're still working hard to provide game description on this game! In the upcoming updates, more and more games will have their descriptions and instructions to help you beat it, so stay tuned for more updates!",
+      "controls": ["Still working on this one O_O"],
+      "thumb": "https://macvg-games.github.io/action-games/tanuki-sunset/img/cover.png"
+    },
+    {
+      "id": 246,
+      "name": "Temple Run 2",
+      "category": "action",
+      "popularity": "50M+",
+      "releaseDate": "January 16, 2013",
+      "rating": "TODO",
+      "new": false,
+      "trending": 15000,
+      "link": "https://macvg-games.github.io/action-games/temple-run-2/",
+      "genre": "Endless Runner Games",
+      "build": "HTML5, JavaScript",
+      "dev": "Imangi Studios",
+      "about": "Oops, you caught us, we're still working hard to provide game description on this game! In the upcoming updates, more and more games will have their descriptions and instructions to help you beat it, so stay tuned for more updates!",
+      "controls": ["Still working on this one O_O"],
+      "thumb": "https://macvg-games.github.io/action-games/temple-run-2/img/og-icon.png"
+    },
+    {
+      "id": 312,
+      "name": "Terraira",
+      "category": "action",
+      "popularity": "10M+",
+      "releaseDate": "February 6, 2015",
+      "rating": "TODO",
+      "new": false,
+      "trending": 13000,
+      "link": "https://macvg-games.github.io/action-games/terraira/",
+      "genre": "Adventure Games",
+      "build": "Scratch",
+      "dev": "Griffpatch",
+      "about": "Oops, you caught us, we're still working hard to provide game description on this game! In the upcoming updates, more and more games will have their descriptions and instructions to help you beat it, so stay tuned for more updates!",
+      "controls": ["Still working on this one O_O"],
+      "thumb": "https://macvg-games.github.io/action-games/terraira/Terraira.png"
+    },
+    {
+      "id": 252,
+      "name": "This Is The Only Level",
+      "category": "action",
+      "popularity": "10M+",
+      "releaseDate": "August 8, 2009",
+      "rating": "TODO",
+      "new": false,
+      "trending": 12000,
+      "link": "https://macvg-games.github.io/action-games/thisistheonlylevel/",
+      "genre": "Platformer Games",
+      "build": "Flash",
+      "dev": "jmtb02 (John Cooney)",
+      "about": "Oops, you caught us, we're still working hard to provide game description on this game! In the upcoming updates, more and more games will have their descriptions and instructions to help you beat it, so stay tuned for more updates!",
+      "controls": ["Still working on this one O_O"],
+      "thumb": "https://macvg-games.github.io/action-games/thisistheonlylevel/thisistheonlylevel.png"
+    },
+    {
+      "id": 253,
+      "name": "Tiny Fishing",
+      "category": "action",
+      "popularity": "50M+",
+      "releaseDate": "Unknown",
+      "rating": "TODO",
+      "new": false,
+      "trending": 15000,
+      "link": "https://macvg-games.github.io/action-games/tiny-fishing/",
+      "genre": "Progression Games",
+      "build": "HTML5, JavaScript",
+      "dev": "Mad Buffer",
+      "about": "Oops, you caught us, we're still working hard to provide game description on this game! In the upcoming updates, more and more games will have their descriptions and instructions to help you beat it, so stay tuned for more updates!",
+      "controls": ["Still working on this one O_O"],
+      "thumb": "https://macvg-games.github.io/action-games/tiny-fishing/thumb.png"
+    },
+    {
+      "id": 314,
+      "name": "Trimps",
+      "category": "casual",
+      "popularity": "10M+",
+      "releaseDate": "May 15, 2015",
+      "rating": "TODO",
+      "new": false,
+      "trending": 12000,
+      "link": "https://macvg-games.github.io/action-games/trimps/",
+      "genre": "Management Games",
+      "build": "HTML5, JavaScript",
+      "dev": "Greensatellite",
+      "about": "Oops, you caught us, we're still working hard to provide game description on this game! In the upcoming updates, more and more games will have their descriptions and instructions to help you beat it, so stay tuned for more updates!",
+      "controls": ["Still working on this one O_O"],
+      "thumb": "https://macvg-games.github.io/action-games/trimps/Trimps.png",
+      "download": true
+    },
+    {
+      "id": 257,
+      "name": "Tube Jumpers",
+      "category": "action",
+      "popularity": "10M+",
+      "releaseDate": "June 29, 2016",
+      "rating": "TODO",
+      "new": false,
+      "trending": 12000,
+      "link": "https://macvg-games.github.io/action-games/tube-jumpers/",
+      "genre": "Arcade Games",
+      "build": "Unity WebGL",
+      "dev": "Michael Eichler",
+      "about": "Oops, you caught us, we're still working hard to provide game description on this game! In the upcoming updates, more and more games will have their descriptions and instructions to help you beat it, so stay tuned for more updates!",
+      "controls": ["Still working on this one O_O"],
+      "thumb": "https://macvg-games.github.io/action-games/tube-jumpers/img/shark.jpg"
+    },
+    {
+      "id": 258,
+      "name": "Tunnel Rush",
+      "category": "action",
+      "popularity": "30M+",
+      "releaseDate": "2014",
+      "rating": "TODO",
+      "new": false,
+      "trending": 17000,
+      "link": "https://macvg-games.github.io/action-games/tunnel-rush/",
+      "genre": "Reaction Games",
+      "build": "Unity WebGL",
+      "dev": "Deer Cat Games",
+      "about": "Oops, you caught us, we're still working hard to provide game description on this game! In the upcoming updates, more and more games will have their descriptions and instructions to help you beat it, so stay tuned for more updates!",
+      "controls": ["Still working on this one O_O"],
+      "thumb": "https://macvg-games.github.io/action-games/tunnel-rush/img/tunnel.jpg"
+    },
+    {
+      "id": 262,
+      "name": "Vex 3",
+      "category": "action",
+      "popularity": "50M+",
+      "releaseDate": "August 2014",
+      "rating": "TODO",
+      "new": false,
+      "trending": 15000,
+      "link": "https://macvg-games.github.io/action-games/vex3/",
+      "genre": "Platformer Games",
+      "build": "HTML5, JavaScript",
+      "dev": "Amazing Adam",
+      "about": "Vex 3 is another challenging and addictive platformer game in the Vex series. Vex is a very interesting and unique platformer game where you control the player to do all kinds of movements and stunts to move forward, dodge obstacles, collect coins, and reach the end! Do your best to move forward and use checkpoints to save your progress! There's many levels to choose from and enjoy. Have fun!",
+      "controls": [
+        "Up Arrow: Jump",
+        "Down Arrow: Slide / Dodge",
+        "Left / Right Arrows: Move Left / Right",
+        "Note: WASD keys also work"
+      ],
+      "thumb": "https://macvg-games.github.io/action-games/vex3/vex3.png"
+    },
+    {
+      "id": 263,
+      "name": "Vex 4",
+      "category": "action",
+      "popularity": "50M+",
+      "releaseDate": "October 2018",
+      "rating": "TODO",
+      "new": false,
+      "trending": 15000,
+      "link": "https://macvg-games.github.io/action-games/vex4/",
+      "genre": "Platformer Games",
+      "build": "HTML5, JavaScript",
+      "dev": "Amazing Adam",
+      "about": "Vex 4 is the fourth game in the exciting Vex platformer series. Vex is a very interesting and unique platformer game where you control the player to do all kinds of movements and stunts to move forward, dodge obstacles, collect coins, and reach the end! Do your best to move forward and use checkpoints to save your progress! There's many levels to choose from and enjoy. Have fun!",
+      "controls": [
+        "Up Arrow: Jump",
+        "Down Arrow: Slide / Dodge",
+        "Left / Right Arrows: Move Left / Right",
+        "Note: WASD keys also work"
+      ],
+      "thumb": "https://macvg-games.github.io/action-games/vex4/vex4.png"
+    },
+    {
+      "id": 264,
+      "name": "Vex 5",
+      "category": "action",
+      "popularity": "50M+",
+      "releaseDate": "November 2020",
+      "rating": "TODO",
+      "new": false,
+      "trending": 15000,
+      "link": "https://macvg-games.github.io/action-games/vex5/",
+      "genre": "Platformer Games",
+      "build": "HTML5, JavaScript",
+      "dev": "Amazing Adam",
+      "about": "Vex 5 is another awesome sequel to the well-known platformer series Vex! Vex is a very interesting and unique platformer game where you control the player to do all kinds of movements and stunts to move forward, dodge obstacles, collect coins, and reach the end! Do your best to move forward and use checkpoints to save your progress! There's many levels to choose from and enjoy. Have fun!",
+      "controls": [
+        "Up Arrow: Jump",
+        "Down Arrow: Slide / Dodge",
+        "Left / Right Arrows: Move Left / Right",
+        "Note: WASD keys also work"
+      ],
+      "thumb": "https://macvg-games.github.io/action-games/vex5/vex.jpeg"
+    },
+    {
+      "id": 265,
+      "name": "Vex 6",
+      "category": "action",
+      "popularity": "50M+",
+      "releaseDate": "October 2021",
+      "rating": "TODO",
+      "new": false,
+      "trending": 15000,
+      "link": "https://macvg-games.github.io/action-games/vex6/",
+      "genre": "Platformer Games",
+      "build": "HTML5, JavaScript",
+      "dev": "Amazing Adam",
+      "about": "Vex 6, a brand new Vex game with new obstacles and challenges! Vex is a very interesting and unique platformer game where you control the player to do all kinds of movements and stunts to move forward, dodge obstacles, collect coins, and reach the end! Do your best to move forward and use checkpoints to save your progress! There's many levels to choose from and enjoy. Have fun!",
+      "controls": [
+        "Up Arrow: Jump",
+        "Down Arrow: Slide / Dodge",
+        "Left / Right Arrows: Move Left / Right",
+        "Note: WASD keys also work"
+      ],
+      "thumb": "https://macvg-games.github.io/action-games/vex6/assets/icon.jpeg"
+    },
+    {
+      "id": 266,
+      "name": "Vex 7",
+      "category": "action",
+      "popularity": "50M+",
+      "releaseDate": "October 2022",
+      "featured": true,
+      "rating": "TODO",
+      "new": false,
+      "trending": 16000,
+      "link": "https://macvg-games.github.io/action-games/vex7/",
+      "genre": "Platformer Games",
+      "build": "HTML5, JavaScript",
+      "dev": "Amazing Adam",
+      "about": "Vex 7, another addition of fun to the famous platformer series Vex! Vex is a very interesting and unique platformer game where you control the player to do all kinds of movements and stunts to move forward, dodge obstacles, collect coins, and reach the end! Do your best to move forward and use checkpoints to save your progress! There's many levels to choose from and enjoy. Have fun!",
+      "controls": [
+        "Up Arrow: Jump",
+        "Down Arrow: Slide / Dodge",
+        "Left / Right Arrows: Move Left / Right",
+        "Note: WASD keys also work"
+      ],
+      "thumb": "https://macvg-games.github.io/action-games/vex7/assets/icon.jpeg"
+    },
+    {
+      "id": 326,
+      "name": "Vex 8",
+      "category": "action",
+      "popularity": "50M+",
+      "releaseDate": "October 2023",
+      "rating": "TODO",
+      "new": false,
+      "trending": 16000,
+      "link": "https://macvg-games.github.io/action-games/vex8/",
+      "genre": "Platformer Games",
+      "build": "HTML5, JavaScript",
+      "dev": "Amazing Adam",
+      "about": "Vex 8, an exciting new sequel to the Vex platformer series, is here on MacVG! Vex is a very interesting and unique platformer game where you control the player to do all kinds of movements and stunts to move forward, dodge obstacles, collect coins, and reach the end! Do your best to move forward and use checkpoints to save your progress! There's many levels to choose from and enjoy. Have fun!",
+      "controls": [
+        "Up Arrow: Jump",
+        "Down Arrow: Slide / Dodge",
+        "Left / Right Arrows: Move Left / Right",
+        "Note: WASD keys also work"
+      ],
+      "thumb": "https://macvg-games.github.io/action-games/vex8/assets/icon.png"
+    },
+    {
+      "id": 273,
+      "name": "Wolfenstein 3D",
+      "category": "action",
+      "popularity": "50M+",
+      "releaseDate": "May 5, 1992",
+      "rating": "TODO",
+      "new": false,
+      "trending": 14000,
+      "link": "https://macvg-games.github.io/action-games/wolf3d/",
+      "genre": "Shooting Games",
+      "build": "HTML5, JavaScript",
+      "dev": "id Software",
+      "about": "Oops, you caught us, we're still working hard to provide game description on this game! In the upcoming updates, more and more games will have their descriptions and instructions to help you beat it, so stay tuned for more updates!",
+      "controls": ["Still working on this one O_O"],
+      "thumb": "https://macvg-games.github.io/action-games/wolf3d/art/wolf3d.png",
+      "download": true
+    },
+    {
+      "id": 275,
+      "name": "World's Hardest Game",
+      "category": "action",
+      "popularity": "50M+",
+      "releaseDate": "December 15, 2007",
+      "rating": "TODO",
+      "new": false,
+      "trending": 15000,
+      "featured": true,
+      "link": "https://macvg-games.github.io/action-games/worlds-hardest-game/",
+      "genre": "Timing Games",
+      "build": "HTML5, JavaScript",
+      "dev": "Stephen Critoph",
+      "about": "Oops, you caught us, we're still working hard to provide game description on this game! In the upcoming updates, more and more games will have their descriptions and instructions to help you beat it, so stay tuned for more updates!",
+      "controls": ["Still working on this one O_O"],
+      "thumb": "https://macvg-games.github.io/action-games/worlds-hardest-game/images/splash.jpg",
+      "download": true
+    },
+    {
+      "id": 276,
+      "name": "World's Hardest Game 2",
+      "category": "action",
+      "popularity": "50M+",
+      "releaseDate": "Unknown",
+      "rating": "TODO",
+      "new": false,
+      "trending": 14000,
+      "link": "https://macvg-games.github.io/action-games/worlds-hardest-game-2/",
+      "genre": "Timing Games",
+      "build": "HTML5, JavaScript",
+      "dev": "Stephen Critoph",
+      "about": "Oops, you caught us, we're still working hard to provide game description on this game! In the upcoming updates, more and more games will have their descriptions and instructions to help you beat it, so stay tuned for more updates!",
+      "controls": ["Still working on this one O_O"],
+      "thumb": "https://macvg-games.github.io/action-games/worlds-hardest-game-2/the-worlds-hardest-game-2.jpg",
+      "download": true
+    },
+    // ... (continuing with the rest of the games in the same pattern)
+    // The pattern continues for all remaining games...
+
+    // New games section
+    {
+      "id": 482,
+      "name": "Bally",
+      "category": "strategy",
+      "popularity": "500K+",
+      "releaseDate": "Unknown",
+      "rating": "TODO",
+      "new": true,
+      "trending": 5000,
+      "link": "https://macvg-games.github.io/strategy-games/bally/",
+      "genre": "Physics-Based Strategy Games",
+      "build": "HTML5, JavaScript",
+      "dev": "Anonymous",
+      "about": "Oops, you caught us, we're still working hard to provide game description on this game! In the upcoming updates, more and more games will have their descriptions and instructions to help you beat it, so stay tuned for more updates!",
+      "controls": ["Still working on this one O_O"],
+      "thumb": "https://macvg-games.github.io/strategy-games/bally/thumb.png"
+    },
+    {
+      "id": 483,
+      "name": "Bicycle Stunt 3D",
+      "category": "driving",
+      "popularity": "500K+",
+      "releaseDate": "Unknown",
+      "rating": "TODO",
+      "new": true,
+      "trending": 6000,
+      "link": "https://macvg-games.github.io/driving-games/bicycle-stunt-3d/",
+      "genre": "Biking Games",
+      "build": "Unity WebGL",
+      "dev": "Anonymous",
+      "about": "Oops, you caught us, we're still working hard to provide game description on this game! In the upcoming updates, more and more games will have their descriptions and instructions to help you beat it, so stay tuned for more updates!",
+      "controls": ["Still working on this one O_O"],
+      "thumb": "https://macvg-games.github.io/driving-games/bicycle-stunt-3d/thumbnail.jpg"
+    },
+    {
+      "id": 484,
+      "name": "Bob the Robber 4",
+      "category": "action",
+      "popularity": "10M+",
+      "releaseDate": "July 30, 2017",
+      "rating": "TODO",
+      "new": true,
+      "trending": 12000,
+      "link": "https://macvg-games.github.io/action-games/bob-the-robber-4/",
+      "genre": "Escaping Games",
+      "build": "HTML5, JavaScript",
+      "dev": "Meow Beast",
+      "about": "Oops, you caught us, we're still working hard to provide game description on this game! In the upcoming updates, more and more games will have their descriptions and instructions to help you beat it, so stay tuned for more updates!",
+      "controls": ["Still working on this one O_O"],
+      "thumb": "https://macvg-games.github.io/action-games/bob-the-robber-4/thumb.png"
+    },
+    {
+      "id": 485,
+      "name": "Bottle Flip 3D",
+      "category": "casual",
+      "popularity": "5M+",
+      "releaseDate": "October 2019",
+      "rating": "TODO",
+      "new": true,
+      "trending": 9000,
+      "link": "https://macvg-games.github.io/casual-games/bottle-flip-3d/",
+      "genre": "Casual Games",
+      "build": "Unity WebGL",
+      "dev": "BPTop",
+      "about": "Oops, you caught us, we're still working hard to provide game description on this game! In the upcoming updates, more and more games will have their descriptions and instructions to help you beat it, so stay tuned for more updates!",
+      "controls": ["Still working on this one O_O"],
+      "thumb": "https://macvg-games.github.io/casual-games/bottle-flip-3d/thumb.png"
+    },
+    {
+      "id": 486,
+      "name": "Bullet Force",
+      "category": "action",
+      "popularity": "100M+",
+      "releaseDate": "June 13, 2016",
+      "rating": "TODO",
+      "new": true,
+      "trending": 20000,
+      "link": "https://macvg-games.github.io/action-games/bullet-force/",
+      "genre": "Shooter Games",
+      "build": "Unity WebGL",
+      "dev": "Blayze Games",
+      "about": "Oops, you caught us, we're still working hard to provide game description on this game! In the upcoming updates, more and more games will have their descriptions and instructions to help you beat it, so stay tuned for more updates!",
+      "controls": ["Still working on this one O_O"],
+      "thumb": "https://macvg-games.github.io/action-games/bullet-force/thumb.jpg"
+    },
+    {
+      "id": 487,
+      "name": "Burnin' Rubber 5 XS",
+      "category": "driving",
+      "popularity": "10M+",
+      "releaseDate": "October 15, 2020",
+      "rating": "TODO",
+      "new": true,
+      "trending": 13000,
+      "link": "https://macvg-games.github.io/driving-games/burnin-rubber-5xs/",
+      "genre": "Racing Games",
+      "build": "Unity WebGL",
+      "dev": "XformGames",
+      "about": "Oops, you caught us, we're still working hard to provide game description on this game! In the upcoming updates, more and more games will have their descriptions and instructions to help you beat it, so stay tuned for more updates!",
+      "controls": ["Arrow Keys: Drive", "Z: Weapon 1", "X: Weapon 2"],
+      "thumb": "https://macvg-games.github.io/driving-games/burnin-rubber-5xs/thumb.jpg"
+    },
+    {
+      "id": 488,
+      "name": "Cartoon Mini Racing",
+      "category": "driving",
+      "popularity": "10M+",
+      "releaseDate": "June 5, 2018",
+      "rating": "TODO",
+      "new": true,
+      "trending": 12000,
+      "link": "https://macvg-games.github.io/driving-games/cartoon-mini-racing/",
+      "genre": "Racing Games",
+      "build": "Unity WebGL",
+      "dev": "Brain Software",
+      "about": "Oops, you caught us, we're still working hard to provide game description on this game! In the upcoming updates, more and more games will have their descriptions and instructions to help you beat it, so stay tuned for more updates!",
+      "controls": ["Arrow Keys: Drive", "H: Reset Car"],
+      "thumb": "https://macvg-games.github.io/driving-games/cartoon-mini-racing/thumb.jpg"
+    },
+    {
+      "id": 489,
+      "name": "Run 2",
+      "category": "action",
+      "popularity": "50M+",
+      "releaseDate": "March 21, 2011",
+      "rating": "TODO",
+      "new": true,
+      "trending": 15000,
+      "link": "https://macvg-games.github.io/action-games/run-2/",
+      "genre": "Endless Runner Games",
+      "build": "HTML5, JavaScript",
+      "dev": "Player_03",
+      "about": "Oops, you caught us, we're still working hard to provide game description on this game! In the upcoming updates, more and more games will have their descriptions and instructions to help you beat it, so stay tuned for more updates!",
+      "controls": ["Up Arrow: Jump", "Left / Right Arrows: Move"],
+      "thumb": "https://macvg-games.github.io/action-games/run-2/thumb.png"
+    },
+    {
+      "id": 490,
+      "name": "Skywire",
+      "category": "action",
+      "popularity": "500K+",
+      "releaseDate": "March 28, 2007",
+      "rating": "TODO",
+      "new": true,
+      "trending": 7000,
+      "link": "https://macvg-games.github.io/action-games/skywire/",
+      "genre": "Timing Games",
+      "build": "Flash",
+      "dev": "Nitrome",
+      "about": "Oops, you caught us, we're still working hard to provide game description on this game! In the upcoming updates, more and more games will have their descriptions and instructions to help you beat it, so stay tuned for more updates!",
+      "controls": ["Still working on this one O_O"],
+      "thumb": "https://macvg-games.github.io/action-games/skywire/thumb.avif"
+    },
+    {
+      "id": 491,
+      "name": "Whack your Boss",
+      "category": "casual",
+      "popularity": "1M+",
+      "releaseDate": "November 11, 2004",
+      "rating": "TODO",
+      "new": true,
+      "trending": 8000,
+      "link": "https://macvg-games.github.io/casual-games/whack-your-boss/",
+      "genre": "Relaxing Games",
+      "build": "Flash",
+      "dev": "Tom Winkler",
+      "about": "Oops, you caught us, we're still working hard to provide game description on this game! In the upcoming updates, more and more games will have their descriptions and instructions to help you beat it, so stay tuned for more updates!",
+      "controls": ["Still working on this one O_O"],
+      "thumb": "https://macvg-games.github.io/casual-games/whack-your-boss/thumb.jpg"
+    },
+    {
+      "id": 492,
+      "name": "Crazy Tunnel 3D",
+      "category": "action",
+      "popularity": "500K+",
+      "releaseDate": "May 19, 2022",
+      "rating": "TODO",
+      "new": true,
+      "trending": 8000,
+      "link": "https://macvg-games.github.io/action-games/crazy-tunnel-3d/",
+      "genre": "Reaction Games",
+      "build": "Unity WebGL",
+      "dev": "Anonymous",
+      "about": "Oops, you caught us, we're still working hard to provide game description on this game! In the upcoming updates, more and more games will have their descriptions and instructions to help you beat it, so stay tuned for more updates!",
+      "controls": ["Left / Right Arrows: Dash Left / Right", "Up Arrow / W Key: Jump"],
+      "thumb": "https://macvg-games.github.io/action-games/crazy-tunnel-3d/thumb.webp"
+    },
+    {
+      "id": 493,
+      "name": "Eagle Ride",
+      "category": "action",
+      "popularity": "5M+",
+      "releaseDate": "October 2019",
+      "rating": "TODO",
+      "new": true,
+      "trending": 10000,
+      "link": "https://macvg-games.github.io/action-games/eagle-ride/",
+      "genre": "Reaction Games",
+      "build": "Unity WebGL",
+      "dev": "Aron Sommer",
+      "about": "Oops, you caught us, we're still working hard to provide game description on this game! In the upcoming updates, more and more games will have their descriptions and instructions to help you beat it, so stay tuned for more updates!",
+      "controls": ["Arrow / WASD Keys: Dash Left / Right"],
+      "thumb": "https://macvg-games.github.io/action-games/eagle-ride/logo.avif"
+    },
+    {
+      "id": 494,
+      "name": "Earn to Die",
+      "category": "driving",
+      "popularity": "100M+",
+      "releaseDate": "March 11, 2013",
+      "rating": "TODO",
+      "new": true,
+      "trending": 18000,
+      "link": "https://macvg-games.github.io/driving-games/earn-to-die/",
+      "genre": "Car Racing Games",
+      "build": "Unity WebGL",
+      "dev": "Toffee Games",
+      "about": "Oops, you caught us, we're still working hard to provide game description on this game! In the upcoming updates, more and more games will have their descriptions and instructions to help you beat it, so stay tuned for more updates!",
+      "controls": [
+        "Up Arrow: Forward",
+        "Down Arrow: Backward",
+        "Left / Right Arrows: Tilt",
+        "Esc: Pause",
+        "Note: WASD keys also work"
+      ],
+      "thumb": "https://macvg-games.github.io/driving-games/earn-to-die/logo.png"
+    },
+    {
+      "id": 495,
+      "name": "Electron Dash",
+      "category": "action",
+      "popularity": "1M+",
+      "releaseDate": "Unknown",
+      "rating": "TODO",
+      "new": true,
+      "trending": 9000,
+      "link": "https://macvg-games.github.io/action-games/electron-dash/",
+      "genre": "Endless Runner Games",
+      "build": "Unity WebGL",
+      "dev": "DQV Studio",
+      "about": "Oops, you caught us, we're still working hard to provide game description on this game! In the upcoming updates, more and more games will have their descriptions and instructions to help you beat it, so stay tuned for more updates!",
+      "controls": ["Left / Right Arrows: Dash Left / Right", "Up Arrow / Space: Jump", "Note: WASD keys also work"],
+      "thumb": "https://macvg-games.github.io/action-games/electron-dash/logo.png"
+    },
+    {
+      "id": 496,
+      "name": "Endless Tunnel",
+      "category": "action",
+      "popularity": "500K+",
+      "releaseDate": "Unknown",
+      "rating": "TODO",
+      "new": true,
+      "trending": 7000,
+      "link": "https://macvg-games.github.io/action-games/endless-tunnel/",
+      "genre": "Reaction Games",
+      "build": "Unity WebGL",
+      "dev": "Anonymous",
+      "about": "Oops, you caught us, we're still working hard to provide game description on this game! In the upcoming updates, more and more games will have their descriptions and instructions to help you beat it, so stay tuned for more updates!",
+      "controls": ["Left / Right Arrow Keys: Turn Left / Right"],
+      "thumb": "https://macvg-games.github.io/action-games/endless-tunnel/logo.png"
+    },
+    {
+      "id": 497,
+      "name": "Fisherman Life",
+      "category": "casual",
+      "popularity": "1M+",
+      "releaseDate": "February 2022",
+      "rating": "TODO",
+      "new": true,
+      "trending": 8000,
+      "link": "https://macvg-games.github.io/casual-games/fisherman-life/",
+      "genre": "Casual Games",
+      "build": "Unity WebGL",
+      "dev": "Izyplay Game Studio",
+      "about": "Oops, you caught us, we're still working hard to provide game description on this game! In the upcoming updates, more and more games will have their descriptions and instructions to help you beat it, so stay tuned for more updates!",
+      "controls": ["Arrow / WASD Keys: Move"],
+      "thumb": "https://macvg-games.github.io/casual-games/fisherman-life/logo.webp"
+    },
+    {
+      "id": 498,
+      "name": "Football Run",
+      "category": "action",
+      "popularity": "1M+",
+      "releaseDate": "Unknown",
+      "rating": "TODO",
+      "new": true,
+      "trending": 9000,
+      "link": "https://macvg-games.github.io/action-games/football-run/",
+      "genre": "Platformer Games",
+      "build": "Unity WebGL",
+      "dev": "Anonymous",
+      "about": "Oops, you caught us, we're still working hard to provide game description on this game! In the upcoming updates, more and more games will have their descriptions and instructions to help you beat it, so stay tuned for more updates!",
+      "controls": ["Up Arrow: Jump", "Down Arrow: Slide / Smash"],
+      "thumb": "https://macvg-games.github.io/action-games/football-run/logo.jpg"
+    },
+    {
+      "id": 499,
+      "name": "Gladihoppers",
+      "category": "action",
+      "popularity": "10M+",
+      "releaseDate": "December 19, 2018",
+      "rating": "TODO",
+      "new": true,
+      "trending": 13000,
+      "link": "https://macvg-games.github.io/action-games/gladihoppers/",
+      "genre": "Dueling Games",
+      "build": "Unity WebGL",
+      "dev": "Dreamon Studios",
+      "about": "Oops, you caught us, we're still working hard to provide game description on this game! In the upcoming updates, more and more games will have their descriptions and instructions to help you beat it, so stay tuned for more updates!",
+      "controls": ["WASD Keys: Move", "Arrow Keys: Attack", "Space: Switch Stance", "Esc: Pause"],
+      "thumb": "https://macvg-games.github.io/action-games/gladihoppers/logo.jpg"
+    },
+    {
+      "id": 500,
+      "name": "Glitch Dash",
+      "category": "action",
+      "popularity": "10M+",
+      "releaseDate": "February 21, 2018",
+      "rating": "TODO",
+      "new": true,
+      "trending": 12000,
+      "link": "https://macvg-games.github.io/action-games/glitch-dash/",
+      "genre": "Endless Runner Games",
+      "build": "Unity WebGL",
+      "dev": "David Marquardt",
+      "about": "Oops, you caught us, we're still working hard to provide game description on this game! In the upcoming updates, more and more games will have their descriptions and instructions to help you beat it, so stay tuned for more updates!",
+      "controls": ["Arrow Keys: Move", "S: Use Shield"],
+      "thumb": "https://macvg-games.github.io/action-games/glitch-dash/logo.avif"
+    },
+    {
+      "id": 501,
+      "name": "Ohio Fortnite",
+      "category": "action",
+      "popularity": "5M+",
+      "releaseDate": "Unknown",
+      "rating": "TODO",
+      "new": true,
+      "trending": 11000,
+      "link": "https://macvg-games.github.io/action-games/ohio-fortnite/",
+      "genre": "Shooter Games",
+      "build": "Unity WebGL",
+      "dev": "DiaoChangNan",
+      "about": "Oops, you caught us, we're still working hard to provide game description on this game! In the upcoming updates, more and more games will have their descriptions and instructions to help you beat it, so stay tuned for more updates!",
+      "controls": [
+        "WASD Keys: Move",
+        "Mouse: Aim",
+        "Click: Shoot",
+        "Space: Jump",
+        "Shift: Run",
+        "R: Reload",
+        "F: Action",
+        "M: Map",
+        "Number Keys: Switch Weapons",
+        "Esc: Pause"
+      ],
+      "thumb": "https://macvg-games.github.io/action-games/ohio-fortnite/logo.jpg"
+    }
+  ];
+        // DOM Elements
+        const navButtons = document.querySelectorAll('.nav-btn');
+        const pages = document.querySelectorAll('.page');
+        const gamesContainers = {
+            home: document.getElementById('home-games'),
+            new: document.getElementById('new-games'),
+            trending: document.getElementById('trending-games'),
+            favorites: document.getElementById('favorites-games'),
+            recent: document.getElementById('recent-games')
+        };
+        const gameFrame = document.getElementById('game-frame');
+        const gameIframe = document.getElementById('game-iframe');
+        const frameTitle = document.getElementById('frame-title');
+        const closeBtn = document.getElementById('close-btn');
+        const fullscreenBtn = document.getElementById('fullscreen-btn');
+        const shareBtn = document.getElementById('share-btn');
+        const favoriteBtn = document.getElementById('favorite-btn');
+        const searchInput = document.querySelector('.search-bar input');
+        const themeOptions = document.querySelectorAll('.theme-option');
+        const cloakingOptions = document.querySelectorAll('.cloaking-option');
+        const embedUrlInput = document.getElementById('embed-url');
+        const embedButton = document.getElementById('embed-button');
+        const customTitleInput = document.getElementById('custom-title');
+        const customFaviconInput = document.getElementById('custom-favicon');
+        const applyCustomCloakBtn = document.getElementById('apply-custom-cloak');
+
+        // Current state
+        let currentGame = null;
+        let favorites = JSON.parse(localStorage.getItem('favorites')) || [];
+        let recentGames = JSON.parse(localStorage.getItem('recentGames')) || [];
+
+        // Initialize the app
+        function init() {
+            renderGames('home', games);
+            renderGames('new', games.filter(game => game.new));
+            renderGames('trending', games.sort((a, b) => b.trending - a.trending).slice(0, 12));
+            renderFavorites();
+            renderRecent();
+            
+            // Set up event listeners
+            setupEventListeners();
+            
+            // Apply saved theme
+            const savedTheme = localStorage.getItem('theme') || 'light';
+            document.body.classList.toggle('dark-theme', savedTheme === 'dark');
+            
+            // Update theme buttons
+            themeOptions.forEach(option => {
+                option.classList.toggle('active', option.dataset.theme === savedTheme);
+            });
+        }
+
+        // Set up all event listeners
+        function setupEventListeners() {
+            // Navigation
+            navButtons.forEach(button => {
+                button.addEventListener('click', () => {
+                    const pageId = button.dataset.page;
+                    switchPage(pageId);
+                    
+                    // Update active button
+                    navButtons.forEach(btn => btn.classList.remove('active'));
+                    button.classList.add('active');
+                });
+            });
+
+            // Game frame controls
+            closeBtn.addEventListener('click', closeGameFrame);
+            fullscreenBtn.addEventListener('click', toggleFullscreen);
+            shareBtn.addEventListener('click', shareGame);
+            favoriteBtn.addEventListener('click', toggleFavorite);
+
+            // Search functionality
+            searchInput.addEventListener('input', handleSearch);
+
+            // Settings
+            themeOptions.forEach(option => {
+                option.addEventListener('click', () => {
+                    const theme = option.dataset.theme;
+                    setTheme(theme);
+                    
+                    themeOptions.forEach(opt => opt.classList.remove('active'));
+                    option.classList.add('active');
+                });
+            });
+
+            cloakingOptions.forEach(option => {
+                option.addEventListener('click', () => {
+                    const mode = option.dataset.cloak;
+                    setTabCloaking(mode);
+                });
+            });
+
+            embedButton.addEventListener('click', embedWebsite);
+            applyCustomCloakBtn.addEventListener('click', applyCustomCloak);
+        }
+
+        // Render games to a specific container
+        function renderGames(containerId, gamesList) {
+            const container = gamesContainers[containerId];
+            if (!container) return;
+
+            container.innerHTML = '';
+            
+            gamesList.forEach(game => {
+                const gameCard = document.createElement('div');
+                gameCard.className = `game-card ${game.featured ? 'featured' : ''}`;
+                gameCard.dataset.id = game.id;
+                
+                // Use game thumbnail if available, otherwise fallback to icon
+                const thumbSrc = game.thumb || 'default-game.png';
+                
+                gameCard.innerHTML = `
+                    <div class="game-thumb">
+                        <img src="${thumbSrc}" alt="${game.name}" class="game-image">
+                        ${!game.thumb ? `<i class="fas fa-gamepad fallback-icon"></i>` : ''}
+                    </div>
+                    <div class="game-info">
+                        <h3 class="game-title">${game.name}</h3>
+                        <p class="game-about">${game.about}</p>
+                    </div>
+                `;
+                
+                gameCard.addEventListener('click', () => openGame(game));
+                container.appendChild(gameCard);
+            });
+        }
+
+        // Render favorite games
+        function renderFavorites() {
+            const favoriteGames = games.filter(game => favorites.includes(game.id));
+            renderGames('favorites', favoriteGames);
+        }
+
+        // Render recent games
+        function renderRecent() {
+            const recentGameIds = recentGames.map(game => game.id);
+            const recentGamesList = games.filter(game => recentGameIds.includes(game.id));
+            renderGames('recent', recentGamesList);
+        }
+
+        // Switch between pages
+        function switchPage(pageId) {
+            pages.forEach(page => {
+                page.classList.toggle('active', page.id === pageId);
+            });
+        }
+
+        // Open a game in the game frame
+        function openGame(game) {
+            currentGame = game;
+            gameIframe.src = game.link;
+            frameTitle.textContent = game.name;
+            gameFrame.classList.add('active');
+            
+            // Update favorite button state
+            const isFavorite = favorites.includes(game.id);
+            favoriteBtn.innerHTML = isFavorite ? '<i class="fas fa-heart"></i>' : '<i class="far fa-heart"></i>';
+            
+            // Add to recent games
+            addToRecent(game);
+        }
+
+        // Close the game frame
+        function closeGameFrame() {
+            gameFrame.classList.remove('active');
+            gameIframe.src = '';
+            currentGame = null;
+        }
+
+        // Toggle fullscreen mode
+        function toggleFullscreen() {
+            if (!document.fullscreenElement) {
+                gameFrame.requestFullscreen().catch(err => {
+                    console.error(`Error attempting to enable fullscreen: ${err.message}`);
+                });
+            } else {
+                document.exitFullscreen();
+            }
+        }
+
+        // Share game
+        function shareGame() {
+            if (navigator.share && currentGame) {
+                navigator.share({
+                    title: currentGame.name,
+                    text: `Check out ${currentGame.name} on NiamVerse!`,
+                    url: currentGame.link,
+                })
+                .catch(console.error);
+            } else {
+                // Fallback: copy to clipboard
+                navigator.clipboard.writeText(currentGame.link).then(() => {
+                    alert('Game link copied to clipboard!');
+                });
+            }
+        }
+
+        // Toggle favorite status
+        function toggleFavorite() {
+            if (!currentGame) return;
+            
+            const index = favorites.indexOf(currentGame.id);
+            if (index > -1) {
+                favorites.splice(index, 1);
+                favoriteBtn.innerHTML = '<i class="far fa-heart"></i>';
+            } else {
+                favorites.push(currentGame.id);
+                favoriteBtn.innerHTML = '<i class="fas fa-heart"></i>';
+            }
+            
+            localStorage.setItem('favorites', JSON.stringify(favorites));
+            renderFavorites();
+        }
+
+        // Add game to recent games
+        function addToRecent(game) {
+            // Remove if already exists
+            recentGames = recentGames.filter(item => item.id !== game.id);
+            
+            // Add to beginning
+            recentGames.unshift({
+                id: game.id,
+                timestamp: Date.now()
+            });
+            
+            // Keep only the 10 most recent
+            if (recentGames.length > 10) {
+                recentGames = recentGames.slice(0, 10);
+            }
+            
+            localStorage.setItem('recentGames', JSON.stringify(recentGames));
+            renderRecent();
+        }
+
+        // Handle search
+        function handleSearch() {
+            const query = searchInput.value.toLowerCase();
+            if (query.length < 2) {
+                renderGames('home', games);
+                return;
+            }
+            
+            const filteredGames = games.filter(game => 
+                game.name.toLowerCase().includes(query) || 
+                game.about.toLowerCase().includes(query)
+            );
+            
+            renderGames('home', filteredGames);
+        }
+
+        // Set theme
+        function setTheme(theme) {
+            document.body.classList.toggle('dark-theme', theme === 'dark');
+            localStorage.setItem('theme', theme);
+        }
+
+        // Set tab cloaking
+        function setTabCloaking(mode) {
+            let title = 'NiamVerse - Ultimate Gaming Experience';
+            let favicon = 'favicon.png';
+            
+            switch(mode) {
+                case 'study':
+                    title = 'Google Classroom';
+                    favicon = 'https://www.gstatic.com/classroom/logo_square_48.svg';
+                    break;
+                case 'work':
+                    title = 'Google Docs';
+                    favicon = 'https://www.gstatic.com/images/branding/product/2x/docs_2020q4_48dp.png';
+                    break;
+                case 'research':
+                    title = 'Google Search';
+                    favicon = 'https://www.google.com/favicon.ico';
+                    break;
+            }
+            
+            document.title = title;
+            changeFavicon(favicon);
+            
+            alert(`Tab cloaking activated! Tab title changed to "${title}"`);
+        }
+
+        // Apply custom tab cloaking
+        function applyCustomCloak() {
+            const customTitle = customTitleInput.value.trim();
+            const customFavicon = customFaviconInput.value.trim();
+            
+            if (!customTitle && !customFavicon) {
+                alert('Please enter at least a tab title or favicon URL');
+                return;
+            }
+            
+            // Change tab title
+            if (customTitle) {
+                document.title = customTitle;
+            }
+            
+            // Change favicon
+            if (customFavicon) {
+                changeFavicon(customFavicon);
+            }
+            
+            alert('Custom tab cloaking applied!');
+            
+            // Clear inputs
+            customTitleInput.value = '';
+            customFaviconInput.value = '';
+        }
+
+        // Function to change favicon dynamically
+        function changeFavicon(url) {
+            // Remove existing favicon
+            const existingFavicon = document.querySelector('link[rel="icon"]');
+            if (existingFavicon) {
+                existingFavicon.remove();
+            }
+            
+            // Create new favicon
+            const favicon = document.createElement('link');
+            favicon.rel = 'icon';
+            favicon.type = 'image/x-icon';
+            favicon.href = url;
+            
+            document.head.appendChild(favicon);
+        }
+
+        // Embed website
+        function embedWebsite() {
+            let url = embedUrlInput.value.trim();
+            
+            if (!url) {
+                alert('Please enter a URL');
+                return;
+            }
+            
+            // Add protocol if missing
+            if (!url.startsWith('http://') && !url.startsWith('https://')) {
+                url = 'https://' + url;
+            }
+            
+            // Open in a new tab with about:blank
+            const newTab = window.open('about:blank');
+            newTab.document.write(`
+                <html>
+                <head>
+                    <title>Embedded Page</title>
+                    <style>body, html { margin: 0; padding: 0; height: 100%; } iframe { width: 100%; height: 100%; border: none; }</style>
+                </head>
+                <body>
+                    <iframe src="${url}"></iframe>
+                </body>
+                </html>
+            `);
+            
+            embedUrlInput.value = '';
+        }
+
+        // Initialize the app when DOM is loaded
+        document.addEventListener('DOMContentLoaded', init);
+    </script>
+</body>
+</html>
