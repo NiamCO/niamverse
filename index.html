@@ -3901,7 +3901,7 @@
 
         // Initialize the app when DOM is loaded
         document.addEventListener('DOMContentLoaded', init);
-        // create overlay
+// create overlay
 const ov = document.createElement("div");
 ov.id = "niamUpdateOverlay";
 ov.innerHTML = `
@@ -3909,13 +3909,13 @@ ov.innerHTML = `
     <h1>New Update!</h1>
     <div class="btns">
       <a href="https://niamco.github.io/macvg" class="ov-btn">Go to Update</a>
-      <a href="https://niamco.github.io/niamverse" class="ov-btn">Stay on NiamVerse</a>
+      <button id="stayNiamverse" class="ov-btn">Stay on NiamVerse</button>
     </div>
   </div>
 `;
 document.body.appendChild(ov);
 
-// inject sexy CSS without polluting your crusty stylesheet
+// inject sexy CSS
 const style = document.createElement("style");
 style.textContent = `
   #niamUpdateOverlay {
@@ -3961,7 +3961,10 @@ style.textContent = `
     font-size: 18px;
     border-radius: 10px;
     text-decoration: none;
+    text-align: center;
     transition: 0.2s;
+    border: none;
+    cursor: pointer;
   }
 
   #niamUpdateOverlay .ov-btn:hover {
@@ -3975,6 +3978,12 @@ style.textContent = `
   }
 `;
 document.head.appendChild(style);
+
+// button that just deletes the overlay
+document.getElementById("stayNiamverse").onclick = () => {
+  ov.remove();
+};
+
 
     </script>
 </body>
