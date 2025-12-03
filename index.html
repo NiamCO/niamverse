@@ -3901,6 +3901,81 @@
 
         // Initialize the app when DOM is loaded
         document.addEventListener('DOMContentLoaded', init);
+        // create overlay
+const ov = document.createElement("div");
+ov.id = "niamUpdateOverlay";
+ov.innerHTML = `
+  <div class="overlay-box">
+    <h1>New Update!</h1>
+    <div class="btns">
+      <a href="https://niamco.github.io/macvg" class="ov-btn">Go to Update</a>
+      <a href="https://niamco.github.io/niamverse" class="ov-btn">Stay on NiamVerse</a>
+    </div>
+  </div>
+`;
+document.body.appendChild(ov);
+
+// inject sexy CSS without polluting your crusty stylesheet
+const style = document.createElement("style");
+style.textContent = `
+  #niamUpdateOverlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.85);
+    backdrop-filter: blur(8px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 999999;
+    font-family: Arial, sans-serif;
+  }
+
+  #niamUpdateOverlay .overlay-box {
+    background: white;
+    padding: 40px;
+    border-radius: 16px;
+    text-align: center;
+    max-width: 400px;
+    width: 90%;
+    box-shadow: 0 0 30px rgba(255,255,255,0.15);
+    animation: pop 0.4s ease-out;
+  }
+
+  #niamUpdateOverlay h1 {
+    margin-bottom: 20px;
+    font-size: 32px;
+    color: #111;
+  }
+
+  #niamUpdateOverlay .btns {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+  }
+
+  #niamUpdateOverlay .ov-btn {
+    display: block;
+    padding: 14px;
+    background: #007bff;
+    color: white;
+    font-size: 18px;
+    border-radius: 10px;
+    text-decoration: none;
+    transition: 0.2s;
+  }
+
+  #niamUpdateOverlay .ov-btn:hover {
+    transform: scale(1.05);
+    background: #005fcc;
+  }
+
+  @keyframes pop {
+    0% { transform: scale(0.7); opacity: 0; }
+    100% { transform: scale(1); opacity: 1; }
+  }
+`;
+document.head.appendChild(style);
+
     </script>
 </body>
 </html>
